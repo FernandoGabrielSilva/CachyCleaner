@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs">
+  <Package Name="CachyCleaner" Version="1.0.0.0" Manufacturer="Fernando Gabriel Silva"
+           UpgradeCode="8F2C1D4E-9A3B-4C7E-B1D2-5E6F7A8B9C0D"
+           Scope="perUserOrMachine">
+    <MajorUpgrade DowngradeErrorMessage="A newer version of CachyCleaner is already installed." />
+    <MediaTemplate EmbedCab="yes" />
+
+    <Feature Id="Main" Title="CachyCleaner" Level="1">
+      <ComponentGroupRef Id="AppFiles" />
+      <ComponentRef Id="DesktopShortcut" />
+      <ComponentRef Id="StartMenuShortcut" />
+    </Feature>
+
+    <Icon Id="AppIcon" SourceFile="app\assets\icon.ico" />
+    <Property Id="ARPPRODUCTICON" Value="AppIcon" />
+
+    <Directory Id="TARGETDIR" Name="SourceDir">
+      <Directory Id="ProgramFiles64Folder">
+        <Directory Id="INSTALLFOLDER" Name="CachyCleaner">
+          <Component Id="DesktopShortcut" Directory="DesktopFolder">
+            <Shortcut Id="DesktopShortcutFile" Name="CachyCleaner"
+                      Target="[INSTALLFOLDER]CachyCleaner.exe"
+                      Icon="AppIcon" WorkingDirectory="INSTALLFOLDER" />
+            <RegistryValue Root="HKCU" Key="Software\CachyCleaner" Name="desktop" Type="integer" Value="1" KeyPath="yes" />
+          </Component>
+          <Component Id="StartMenuShortcut" Directory="ProgramMenuFolder">
+            <Shortcut Id="StartMenuShortcutFile" Name="CachyCleaner"
+                      Target="[INSTALLFOLDER]CachyCleaner.exe"
+                      Icon="AppIcon" WorkingDirectory="INSTALLFOLDER" />
+            <RegistryValue Root="HKCU" Key="Software\CachyCleaner" Name="startmenu" Type="integer" Value="1" KeyPath="yes" />
+          </Component>
+        </Directory>
+      </Directory>
+      <Directory Id="DesktopFolder" Name="Desktop" />
+      <Directory Id="ProgramMenuFolder" Name="Programs" />
+    </Directory>
+
+    <ComponentGroup Id="AppFiles" Directory="INSTALLFOLDER">
+      <Files Include="dist\CachyCleaner\**\*" />
+    </ComponentGroup>
+  </Package>
+</Wix>

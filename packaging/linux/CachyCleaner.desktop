@@ -1,0 +1,11 @@
+[Desktop Entry]
+Type=Application
+Name=CachyCleaner
+GenericName=System Cleaner
+Comment=Clean your system safely and elegantly
+Exec=CachyCleaner
+Icon=CachyCleaner
+Terminal=false
+Categories=Utility;System;
+StartupNotify=true
+Keywords=cleaner;cache;temp;junk;system;
