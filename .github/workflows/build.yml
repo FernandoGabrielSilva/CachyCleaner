@@ -96,7 +96,7 @@ jobs:
           name: cachycleaner-linux-${{ matrix.arch }}
           path: |
             dist/packages/*
-            *.AppImage
+            CachyCleaner-*.AppImage
 
   windows:
     name: Windows (${{ matrix.arch }})
@@ -218,5 +218,5 @@ jobs:
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          files: artifacts/*
+          files: artifacts/**/*
           generate_release_notes: true
