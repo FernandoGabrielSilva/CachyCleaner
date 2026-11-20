@@ -15,29 +15,32 @@
     <Icon Id="AppIcon" SourceFile="app\assets\icon.ico" />
     <Property Id="ARPPRODUCTICON" Value="AppIcon" />
 
-    <Directory Id="TARGETDIR" Name="SourceDir">
-      <Directory Id="ProgramFiles64Folder">
-        <Directory Id="INSTALLFOLDER" Name="CachyCleaner">
-          <Component Id="DesktopShortcut" Directory="DesktopFolder">
-            <Shortcut Id="DesktopShortcutFile" Name="CachyCleaner"
-                      Target="[INSTALLFOLDER]CachyCleaner.exe"
-                      Icon="AppIcon" WorkingDirectory="INSTALLFOLDER" />
-            <RegistryValue Root="HKCU" Key="Software\CachyCleaner" Name="desktop" Type="integer" Value="1" KeyPath="yes" />
-          </Component>
-          <Component Id="StartMenuShortcut" Directory="ProgramMenuFolder">
-            <Shortcut Id="StartMenuShortcutFile" Name="CachyCleaner"
-                      Target="[INSTALLFOLDER]CachyCleaner.exe"
-                      Icon="AppIcon" WorkingDirectory="INSTALLFOLDER" />
-            <RegistryValue Root="HKCU" Key="Software\CachyCleaner" Name="startmenu" Type="integer" Value="1" KeyPath="yes" />
-          </Component>
-        </Directory>
-      </Directory>
-      <Directory Id="DesktopFolder" Name="Desktop" />
-      <Directory Id="ProgramMenuFolder" Name="Programs" />
-    </Directory>
+    <StandardDirectory Id="ProgramFiles64Folder">
+      <Directory Id="INSTALLFOLDER" Name="CachyCleaner" />
+    </StandardDirectory>
+
+    <StandardDirectory Id="DesktopFolder">
+      <Component Id="DesktopShortcut" Guid="*">
+        <Shortcut Id="DesktopShortcutFile" Name="CachyCleaner"
+                  Target="[INSTALLFOLDER]CachyCleaner.exe"
+                  Icon="AppIcon" WorkingDirectory="INSTALLFOLDER" />
+        <RegistryValue Root="HKCU" Key="Software\CachyCleaner" Name="desktop"
+                       Type="integer" Value="1" KeyPath="yes" />
+      </Component>
+    </StandardDirectory>
+
+    <StandardDirectory Id="ProgramMenuFolder">
+      <Component Id="StartMenuShortcut" Guid="*">
+        <Shortcut Id="StartMenuShortcutFile" Name="CachyCleaner"
+                  Target="[INSTALLFOLDER]CachyCleaner.exe"
+                  Icon="AppIcon" WorkingDirectory="INSTALLFOLDER" />
+        <RegistryValue Root="HKCU" Key="Software\CachyCleaner" Name="startmenu"
+                       Type="integer" Value="1" KeyPath="yes" />
+      </Component>
+    </StandardDirectory>
 
     <ComponentGroup Id="AppFiles" Directory="INSTALLFOLDER">
-      <Files Include="dist\CachyCleaner\**\*" />
+      <Files Include="$(var.BundleDir)\**\*" />
     </ComponentGroup>
   </Package>
 </Wix>

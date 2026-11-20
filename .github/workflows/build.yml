@@ -156,7 +156,9 @@ jobs:
       - name: Build MSI
         shell: pwsh
         run: |
+          $bundle = (Resolve-Path "dist\CachyCleaner").Path
           wix build -acceptEula wix7 packaging\windows\CachyCleaner.wxs `
+            -d BundleDir="$bundle" `
             -o "CachyCleaner-1.0.0-windows-x86_64.msi"
 
       - name: Upload MSI artifact
