@@ -4,6 +4,7 @@ import QtQuick.Layouts 6.0
 import QtQuick.Controls.Material 6.0
 import QtQuick.Window 6.0
 import CachyCleaner 1.0
+import "components"
 
 ApplicationWindow {
     id: win
@@ -53,8 +54,11 @@ ApplicationWindow {
 
         ColumnLayout {
             anchors.fill: parent
-            anchors.margins: 20
-            spacing: 8
+            anchors.leftMargin: 16
+            anchors.rightMargin: 16
+            anchors.topMargin: 18
+            anchors.bottomMargin: 16
+            spacing: 6
 
             RowLayout {
                 Layout.preferredHeight: 56
@@ -81,13 +85,13 @@ ApplicationWindow {
                     }
                 }
                 ColumnLayout {
-                    spacing: 0
-                    Label { text: "Cachy"; color: Theme.text; font.pixelSize: 17; font.bold: true }
-                    Label { text: "Cleaner"; color: Theme.accentLight; font.pixelSize: 17; font.bold: true }
+                    spacing: 1
+                    Label { text: "Cachy"; color: Theme.text; font.family: Theme.fontFamily; font.pixelSize: 18; font.bold: true }
+                    Label { text: "Cleaner"; color: Theme.accentLight; font.family: Theme.fontFamily; font.pixelSize: 18; font.bold: true }
                 }
             }
 
-            Item { Layout.preferredHeight: 16 }
+            Item { Layout.preferredHeight: 14 }
 
             Repeater {
                 model: [
@@ -96,31 +100,36 @@ ApplicationWindow {
                     {id: "settings",  icon: "⚙", key: "nav.settings"},
                     {id: "about",     icon: "ⓘ", key: "nav.about"}
                 ]
-                delegate: Button {
+                delegate: AppButton {
                     id: navBtn
                     Layout.fillWidth: true
-                    Layout.preferredHeight: 46
+                    Layout.preferredHeight: 44
                     flat: true
+                    padding: 0
+                    leftPadding: 12
+                    rightPadding: 12
                     background: Rectangle {
                         radius: Theme.radiusSmall
-                        color: win.currentPage === modelData.id ? Theme.accent : "transparent"
-                        opacity: win.currentPage === modelData.id ? 0.14 : 1
+                        color: win.currentPage === modelData.id
+                            ? Qt.rgba(Theme.accent.r, Theme.accent.g, Theme.accent.b, 0.18)
+                            : (navBtn.hovered ? Qt.rgba(Theme.text.r, Theme.text.g, Theme.text.b, 0.05) : "transparent")
                         Behavior on color { ColorAnimation { duration: 160 } }
                     }
                     contentItem: RowLayout {
-                        spacing: 14
+                        spacing: 12
                         Label {
                             text: modelData.icon
                             color: win.currentPage === modelData.id ? Theme.accentLight : Theme.textMuted
-                            font.pixelSize: 19
-                            Layout.leftMargin: 10
+                            font.pixelSize: 18
                         }
                         Label {
                             text: appController.translate(modelData.key)
                             color: win.currentPage === modelData.id ? Theme.text : Theme.textMuted
                             font.family: Theme.fontFamily
                             font.pixelSize: 12
+                            font.bold: win.currentPage === modelData.id
                             Layout.fillWidth: true
+                            elide: Text.ElideRight
                         }
                     }
                     onClicked: {
@@ -134,17 +143,26 @@ ApplicationWindow {
 
             Rectangle {
                 Layout.fillWidth: true
-                Layout.preferredHeight: 72
+                Layout.preferredHeight: 74
                 radius: Theme.radiusSmall
                 color: Theme.surfaceAlt
+                border.color: Theme.border
+                border.width: 1
                 ColumnLayout {
                     anchors.fill: parent
-                    anchors.margins: 12
-                    spacing: 2
+                    anchors.leftMargin: 14
+                    anchors.rightMargin: 14
+                    anchors.topMargin: 12
+                    anchors.bottomMargin: 12
+                    spacing: 4
                     RowLayout {
-                        spacing: 6
-                        Rectangle { width: 7; height: 7; radius: 4; color: Theme.green }
-                        Label { text: appController.status; color: Theme.text; font.family: Theme.fontFamily; font.pixelSize: 10 }
+                        spacing: 7
+                        Rectangle { Layout.preferredWidth: 7; Layout.preferredHeight: 7; radius: 4; color: Theme.green }
+                        Label {
+                            text: appController.status
+                            color: Theme.text; font.family: Theme.fontFamily; font.pixelSize: 10
+                            elide: Text.ElideRight; Layout.fillWidth: true
+                        }
                     }
                     Label {
                         text: appController.statusDetail || appController.appVersion
@@ -172,14 +190,14 @@ ApplicationWindow {
             anchors.top: parent.top
             anchors.left: parent.left
             anchors.right: parent.right
-            height: 76
+            height: 80
             color: "transparent"
 
             RowLayout {
                 anchors.fill: parent
-                anchors.leftMargin: 36
-                anchors.rightMargin: 36
-                spacing: 14
+                anchors.leftMargin: Theme.pagePadding
+                anchors.rightMargin: Theme.pagePadding
+                spacing: 12
 
                 ColumnLayout {
                     spacing: 2
@@ -188,32 +206,38 @@ ApplicationWindow {
                         id: pageTitle
                         text: appController.appName
                         font.family: Theme.fontFamily
-font.bold: true
+                        font.pixelSize: 20
+                        font.bold: true
                         color: Theme.text
                     }
                     Label {
                         id: pageSubtitle
                         text: appController.translate("app.tagline")
                         font.family: Theme.fontFamily
+                        font.pixelSize: 12
                         color: Theme.textMuted
                     }
                 }
 
-                Button {
+                AppButton {
                     id: updateBadge
                     visible: {
                         var u = JSON.parse(appController.updateInfoJson)
                         return u.available === true
                     }
                     flat: true
-                    background: Rectangle { radius: 20; color: Theme.amber; opacity: 0.16 }
+                    padding: 0
+                    leftPadding: 14
+                    rightPadding: 14
+                    Layout.preferredHeight: 34
+                    background: Rectangle { radius: 17; color: Qt.rgba(Theme.amber.r, Theme.amber.g, Theme.amber.b, 0.16) }
                     contentItem: RowLayout {
                         spacing: 6
                         Label { text: "●"; color: Theme.amber; font.pixelSize: 10 }
                         Label {
                             text: {
                                 var u = JSON.parse(appController.updateInfoJson)
-                                return appController.translate("settings.updateAvailable", u.latest)
+                                return appController.translateArg("settings.updateAvailable", u.latest)
                             }
                             color: Theme.amber
                             font.family: Theme.fontFamily
@@ -223,11 +247,14 @@ font.bold: true
                     onClicked: win.currentPage = "settings", stack.replace(pageFor("settings"))
                 }
 
-                Button {
+                AppButton {
                     id: scanButton
                     visible: win.currentPage === "dashboard" || win.currentPage === "analyze"
                     enabled: !appController.busy
-                    height: 40
+                    Layout.preferredHeight: 40
+                    padding: 0
+                    leftPadding: 18
+                    rightPadding: 18
                     background: Rectangle {
                         radius: Theme.radiusSmall
                         color: scanButton.enabled ? Theme.accent : Theme.textFaint
@@ -250,11 +277,14 @@ font.bold: true
                     }
                 }
 
-                Button {
+                AppButton {
                     id: cleanButton
                     visible: win.currentPage === "analyze" && selection.count > 0
                     enabled: !appController.busy
-                    height: 40
+                    Layout.preferredHeight: 40
+                    padding: 0
+                    leftPadding: 18
+                    rightPadding: 18
                     background: Rectangle {
                         radius: Theme.radiusSmall
                         color: cleanButton.enabled ? Theme.green : Theme.textFaint
@@ -263,19 +293,22 @@ font.bold: true
                         spacing: 8
                         Label { text: "✓"; color: "white"; font.pixelSize: 14 }
                         Label {
-                            text: appController.translate("header.clean") + " (" + selection.human + ")"
+                            text: appController.translate("common.clean") + " (" + selection.human + ")"
                             color: "white"; font.family: Theme.fontFamily; font.pixelSize: 12; font.bold: true
                         }
                     }
                     onClicked: confirmDialog.open()
                 }
 
-                Button {
+                AppButton {
                     id: cancelButton
                     visible: appController.busy
                     flat: true
-                    height: 40
-                    background: Rectangle { radius: Theme.radiusSmall; color: Theme.red; opacity: 0.12 }
+                    Layout.preferredHeight: 40
+                    padding: 0
+                    leftPadding: 16
+                    rightPadding: 16
+                    background: Rectangle { radius: Theme.radiusSmall; color: Qt.rgba(Theme.red.r, Theme.red.g, Theme.red.b, 0.12) }
                     contentItem: Label {
                         text: appController.translate("header.cancel")
                         color: Theme.red; font.family: Theme.fontFamily; font.pixelSize: 12
@@ -292,6 +325,7 @@ font.bold: true
 
         StackView {
             id: stack
+            objectName: "stack"
             anchors.top: headerLine.bottom
             anchors.left: parent.left
             anchors.right: parent.right
@@ -323,40 +357,96 @@ font.bold: true
     Dialog {
         id: confirmDialog
         anchors.centerIn: parent
-        width: 440
+        width: 470
         modal: true
-        title: appController.translate("analyze.confirmTitle")
-        standardButtons: Dialog.Cancel | Dialog.Ok
+        padding: 0
+        closePolicy: Popup.CloseOnEscape
         background: Rectangle { color: Theme.surface; radius: Theme.radius; border.color: Theme.border; border.width: 1 }
-        Label {
-            id: confirmBody
-            anchors.fill: parent
-            anchors.margins: 20
-            wrapMode: Text.WordWrap
-            color: Theme.textMuted
+
+        header: Label {
+            text: appController.translate("analyze.confirmTitle")
+            color: Theme.text
             font.family: Theme.fontFamily
-            text: ""
+            font.pixelSize: 16
+            font.bold: true
+            leftPadding: 26
+            rightPadding: 26
+            topPadding: 24
+            bottomPadding: 0
         }
-        Label {
-            id: confirmNote
-            anchors.left: parent.left
-            anchors.right: parent.right
-            anchors.bottom: parent.bottom
-            anchors.margins: 20
-            wrapMode: Text.WordWrap
-            color: Theme.amber
-            font.family: Theme.fontFamily
-            text: ""
+
+        contentItem: ColumnLayout {
+            spacing: 12
+            Label {
+                id: confirmBody
+                Layout.fillWidth: true
+                wrapMode: Text.WordWrap
+                color: Theme.textMuted
+                font.family: Theme.fontFamily
+                font.pixelSize: 12
+                lineHeight: 1.35
+            }
+            Label {
+                id: confirmNote
+                Layout.fillWidth: true
+                wrapMode: Text.WordWrap
+                color: Theme.amber
+                font.family: Theme.fontFamily
+                font.pixelSize: 11
+                lineHeight: 1.35
+            }
         }
+
+        footer: Item {
+            implicitHeight: 76
+            RowLayout {
+                anchors.fill: parent
+                anchors.leftMargin: 26
+                anchors.rightMargin: 26
+                anchors.bottomMargin: 22
+                anchors.topMargin: 8
+                spacing: 10
+                Item { Layout.fillWidth: true }
+                AppButton {
+                    flat: true
+                    Layout.preferredHeight: 40
+                    leftPadding: 18
+                    rightPadding: 18
+                    background: Rectangle { radius: Theme.radiusSmall; color: Theme.surfaceAlt; border.color: Theme.border; border.width: 1 }
+                    contentItem: Label {
+                        text: appController.translate("common.cancel")
+                        color: Theme.text; font.family: Theme.fontFamily; font.pixelSize: 11
+                        horizontalAlignment: Text.AlignHCenter
+                    }
+                    onClicked: confirmDialog.close()
+                }
+                AppButton {
+                    flat: true
+                    Layout.preferredHeight: 40
+                    leftPadding: 20
+                    rightPadding: 20
+                    background: Rectangle { radius: Theme.radiusSmall; color: Theme.green }
+                    contentItem: Label {
+                        text: appController.translate("common.clean")
+                        color: "white"; font.family: Theme.fontFamily; font.pixelSize: 11; font.bold: true
+                        horizontalAlignment: Text.AlignHCenter
+                    }
+                    onClicked: {
+                        confirmDialog.close()
+                        appController.cleanSelected(settings.useTrash ? "false" : "true", true)
+                    }
+                }
+            }
+        }
+
         onOpened: {
-            confirmBody.text = appController.translate(
-                "analyze.confirmBody", selection.count, selection.human
+            confirmBody.text = appController.translateArgs(
+                "analyze.confirmBody", String(selection.count), selection.human
             )
             confirmNote.text = settings.useTrash
                 ? appController.translate("analyze.confirmTrash")
                 : appController.translate("analyze.confirmPermanent")
         }
-        onAccepted: appController.cleanSelected(settings.useTrash ? "false" : "true", true)
     }
 
     // -------------------------------------------------------------------- toast
@@ -365,8 +455,8 @@ font.bold: true
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.bottom: parent.bottom
         anchors.bottomMargin: 28
-        width: Math.min(420, parent.width - 80)
-        height: 48
+        width: Math.min(460, parent.width - 80)
+        height: 52
         radius: Theme.radiusSmall
         color: Theme.surface
         border.width: 1
@@ -388,10 +478,11 @@ font.bold: true
 
         RowLayout {
             anchors.fill: parent
-            anchors.margins: 14
+            anchors.leftMargin: 18
+            anchors.rightMargin: 18
             spacing: 10
-            Rectangle { id: toastDot; width: 8; height: 8; radius: 4; color: Theme.accent }
-            Label { id: toastLabel; color: Theme.text; font.family: Theme.fontFamily; Layout.fillWidth: true; elide: Text.ElideRight }
+            Rectangle { id: toastDot; Layout.preferredWidth: 8; Layout.preferredHeight: 8; radius: 4; color: Theme.accent }
+            Label { id: toastLabel; color: Theme.text; font.family: Theme.fontFamily; font.pixelSize: 11; Layout.fillWidth: true; elide: Text.ElideRight }
         }
     }
 

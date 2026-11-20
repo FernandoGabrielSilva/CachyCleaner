@@ -140,5 +140,6 @@
   "custom.name": "Pasta personalizada",
   "custom.description": "Pasta adicionada pelo usuário.",
   "notify.cleanDone": "Limpeza concluída: %1 liberados",
-  "notify.scanDone": "Análise concluída: %1 itens encontrados"
+  "notify.scanDone": "Análise concluída: %1 itens encontrados",
+  "common.clean": "Limpar"
 }

@@ -23,40 +23,74 @@ Item {
         if (!controller) return
         try { selection = JSON.parse(controller.selectionJson) } catch(e) {}
     }
+    function humanSize(b) {
+        if (b < 1024) return b + " B"
+        if (b < 1048576) return (b/1024).toFixed(1) + " KB"
+        if (b < 1073741824) return (b/1048576).toFixed(1) + " MB"
+        return (b/1073741824).toFixed(2) + " GB"
+    }
 
     ColumnLayout {
         anchors.fill: parent
-        anchors.margins: 36
-        spacing: 16
+        anchors.leftMargin: Theme.pagePadding
+        anchors.rightMargin: Theme.pagePadding
+        anchors.topMargin: Theme.pagePadding
+        anchors.bottomMargin: Theme.pagePadding
+        spacing: 14
 
-        // Category chips + toolbar
+        // Search + toolbar
         RowLayout {
             Layout.fillWidth: true
             spacing: 10
 
             TextField {
                 id: searchField
-                Layout.preferredWidth: 320
-                height: 38
+                Layout.preferredWidth: 340
+                Layout.preferredHeight: 40
+                leftPadding: 14
+                rightPadding: 14
                 placeholderText: controller ? controller.translate("analyze.search") : ""
                 color: Theme.text
                 placeholderTextColor: Theme.textFaint
-                background: Rectangle { radius: Theme.radiusSmall; color: Theme.surface; border.color: Theme.border; border.width: 1 }
+                font.family: Theme.fontFamily
+                font.pixelSize: 12
+                selectByMouse: true
+                background: Rectangle {
+                    radius: Theme.radiusSmall
+                    color: Theme.surface
+                    border.color: searchField.activeFocus ? Theme.accent : Theme.border
+                    border.width: 1
+                    Behavior on border.color { ColorAnimation { duration: 140 } }
+                }
                 onTextChanged: controller.setSearch(text)
             }
 
             Item { Layout.fillWidth: true }
 
-            Button {
+            AppButton {
                 flat: true
-                background: Rectangle { radius: Theme.radiusSmall; color: Theme.surfaceAlt }
-                contentItem: Label { text: controller ? controller.translate("analyze.selectAll") : ""; color: Theme.text; font.family: Theme.fontFamily; font.pixelSize: 11 }
+                Layout.preferredHeight: 40
+                leftPadding: 16
+                rightPadding: 16
+                background: Rectangle { radius: Theme.radiusSmall; color: Theme.surfaceAlt; border.color: Theme.border; border.width: 1 }
+                contentItem: Label {
+                    text: controller ? controller.translate("analyze.selectAll") : ""
+                    color: Theme.text; font.family: Theme.fontFamily; font.pixelSize: 11
+                    horizontalAlignment: Text.AlignHCenter
+                }
                 onClicked: controller.selectAll()
             }
-            Button {
+            AppButton {
                 flat: true
-                background: Rectangle { radius: Theme.radiusSmall; color: Theme.surfaceAlt }
-                contentItem: Label { text: controller ? controller.translate("analyze.clearAll") : ""; color: Theme.text; font.family: Theme.fontFamily; font.pixelSize: 11 }
+                Layout.preferredHeight: 40
+                leftPadding: 16
+                rightPadding: 16
+                background: Rectangle { radius: Theme.radiusSmall; color: Theme.surfaceAlt; border.color: Theme.border; border.width: 1 }
+                contentItem: Label {
+                    text: controller ? controller.translate("analyze.clearAll") : ""
+                    color: Theme.text; font.family: Theme.fontFamily; font.pixelSize: 11
+                    horizontalAlignment: Text.AlignHCenter
+                }
                 onClicked: controller.clearSelection()
             }
         }
@@ -64,46 +98,68 @@ Item {
         // Selection summary strip
         Rectangle {
             Layout.fillWidth: true
-            Layout.preferredHeight: 48
+            Layout.preferredHeight: 52
             radius: Theme.radiusSmall
-            color: Theme.accent
-            opacity: 0.10
+            color: Qt.rgba(Theme.accent.r, Theme.accent.g, Theme.accent.b, 0.14)
+            border.color: Qt.rgba(Theme.accent.r, Theme.accent.g, Theme.accent.b, 0.28)
+            border.width: 1
             RowLayout {
                 anchors.fill: parent
-                anchors.margins: 14
+                anchors.leftMargin: 16
+                anchors.rightMargin: 16
+                spacing: 8
                 Label {
                     text: selection.count + " " + (controller ? controller.translate("analyze.selected") : "")
-                    color: Theme.accent; font.family: Theme.fontFamily; font.bold: true; font.pixelSize: 12
+                    color: Theme.accentLight
+                    font.family: Theme.fontFamily; font.bold: true; font.pixelSize: 12
                 }
                 Item { Layout.fillWidth: true }
-                Label { text: selection.human; color: Theme.accent; font.family: Theme.fontFamily; font.bold: true; font.pixelSize: 14 }
+                Label {
+                    text: selection.human
+                    color: Theme.accentLight
+                    font.family: Theme.monoFamily; font.bold: true; font.pixelSize: 13
+                }
             }
         }
 
-        // Results list
+        // Results
         Card {
             Layout.fillWidth: true
             Layout.fillHeight: true
+            contentMargins: 0
+            contentSpacing: 0
             clip: true
 
             ColumnLayout {
-                anchors.fill: parent
+                Layout.fillWidth: true
+                Layout.fillHeight: true
                 spacing: 0
 
-                // Header row
                 Rectangle {
                     Layout.fillWidth: true
-                    Layout.preferredHeight: 44
+                    Layout.preferredHeight: 42
                     color: Theme.surfaceAlt
                     RowLayout {
                         anchors.fill: parent
                         anchors.leftMargin: 20
                         anchors.rightMargin: 20
                         spacing: 12
-                        Item { width: 20 }
-                        Label { text: controller ? controller.translate("analyze.results") : ""; color: Theme.textMuted; font.family: Theme.fontFamily; font.pixelSize: 10; Layout.fillWidth: true }
-                        Label { text: controller ? controller.translate("analyze.size") : ""; color: Theme.textMuted; font.family: Theme.fontFamily; font.pixelSize: 10; Layout.preferredWidth: 90; horizontalAlignment: Text.AlignRight }
-                        Label { text: controller ? controller.translate("analyze.modified") : ""; color: Theme.textMuted; font.family: Theme.fontFamily; font.pixelSize: 10; Layout.preferredWidth: 130; horizontalAlignment: Text.AlignRight }
+                        Item { Layout.preferredWidth: 64 }
+                        Label {
+                            text: controller ? controller.translate("analyze.results") : ""
+                            color: Theme.textMuted; font.family: Theme.fontFamily; font.pixelSize: 10
+                            Layout.fillWidth: true
+                        }
+                        Label {
+                            text: controller ? controller.translate("analyze.size") : ""
+                            color: Theme.textMuted; font.family: Theme.fontFamily; font.pixelSize: 10
+                            Layout.preferredWidth: 92; horizontalAlignment: Text.AlignRight
+                        }
+                        Label {
+                            text: controller ? controller.translate("analyze.modified") : ""
+                            color: Theme.textMuted; font.family: Theme.fontFamily; font.pixelSize: 10
+                            Layout.preferredWidth: 120; horizontalAlignment: Text.AlignRight
+                        }
                     }
                 }
 
@@ -113,18 +169,41 @@ Item {
                     Layout.fillHeight: true
                     model: items.length
                     clip: true
+                    boundsBehavior: Flickable.StopAtBounds
                     ScrollBar.vertical: ScrollBar { policy: ScrollBar.AsNeeded }
 
                     delegate: Rectangle {
                         id: row
                         width: listView.width
-                        height: 56
+                        height: 58
                         color: "transparent"
-                        border.width: 1
-                        border.color: Theme.border
-                        opacity: 1
 
                         property var item: items[index]
+                        property bool hovered: false
+
+                        Rectangle {
+                            anchors.left: parent.left
+                            anchors.right: parent.right
+                            anchors.bottom: parent.bottom
+                            height: 1
+                            color: Theme.border
+                        }
+                        Rectangle {
+                            anchors.fill: parent
+                            color: Theme.accent
+                            opacity: row.hovered ? 0.05 : 0
+                            Behavior on opacity { NumberAnimation { duration: 120 } }
+                        }
+                        MouseArea {
+                            anchors.fill: parent
+                            hoverEnabled: true
+                            onEntered: row.hovered = true
+                            onExited: row.hovered = false
+                            onClicked: {
+                                if (!row.item) return
+                                controller.setItemSelectedByPath(row.item.path, !(row.item.selected !== false))
+                            }
+                        }
 
                         RowLayout {
                             anchors.fill: parent
@@ -134,73 +213,70 @@ Item {
 
                             CheckBox {
                                 id: check
-                                checked: item ? item.selected !== false : false
-                                width: 20
-                                indicator.width: 18; indicator.height: 18
+                                Layout.preferredWidth: 20
+                                Layout.preferredHeight: 20
+                                checked: row.item ? row.item.selected !== false : false
+                                indicator.width: 18
+                                indicator.height: 18
                                 onToggled: {
-                                    if (item) controller.setItemItemSelectedByPath(item.path, check.checked)
+                                    if (row.item) controller.setItemSelectedByPath(row.item.path, check.checked)
                                 }
                                 Connections {
                                     target: controller
                                     function onScanResultsChanged() {
-                                        check.checked = item ? item.selected !== false : false
+                                        check.checked = row.item ? row.item.selected !== false : false
                                     }
                                 }
                             }
                             Rectangle {
                                 Layout.preferredWidth: 32
-
                                 Layout.preferredHeight: 32
                                 radius: 9
-                                color: Theme.surfaceAlt
+                                color: Qt.rgba(Theme.accent.r, Theme.accent.g, Theme.accent.b, 0.14)
                                 Label {
                                     anchors.centerIn: parent
-                                    text: item && item.isDir ? "▣" : "▤"
+                                    text: row.item && row.item.isDir ? "▣" : "▤"
                                     color: Theme.accent
                                     font.pixelSize: 14
                                 }
                             }
                             ColumnLayout {
                                 Layout.fillWidth: true
-                                spacing: 2
+                                spacing: 3
                                 Label {
-                                    text: item ? item.name : ""
-                                    color: Theme.text; font.family: Theme.fontFamily; font.pixelSize: 11
+                                    text: row.item ? row.item.name : ""
+                                    color: Theme.text; font.family: Theme.fontFamily; font.pixelSize: 12
                                     elide: Text.ElideMiddle
                                     Layout.fillWidth: true
                                 }
                                 Label {
-                                    text: item ? item.path : ""
+                                    text: row.item ? row.item.path : ""
                                     color: Theme.textFaint; font.family: Theme.fontFamily; font.pixelSize: 9
                                     elide: Text.ElideMiddle
                                     Layout.fillWidth: true
                                 }
                             }
                             Label {
-                                text: {
-                                    if (!item) return ""
-                                    var b = item.size
-                                    if (b < 1024) return b + " B"
-                                    if (b < 1048576) return (b/1024).toFixed(1) + " KB"
-                                    if (b < 1073741824) return (b/1048576).toFixed(1) + " MB"
-                                    return (b/1073741824).toFixed(2) + " GB"
-                                }
+                                text: row.item ? humanSize(row.item.size) : ""
                                 color: Theme.text; font.family: Theme.monoFamily; font.pixelSize: 10
-                                Layout.preferredWidth: 90; horizontalAlignment: Text.AlignRight
+                                Layout.preferredWidth: 92; horizontalAlignment: Text.AlignRight
                             }
                             Label {
-                                text: item && item.modified ? new Date(item.modified * 1000).toLocaleDateString() : "—"
+                                text: row.item && row.item.modified ? new Date(row.item.modified * 1000).toLocaleDateString() : "—"
                                 color: Theme.textMuted; font.family: Theme.fontFamily; font.pixelSize: 10
-                                Layout.preferredWidth: 130; horizontalAlignment: Text.AlignRight
+                                Layout.preferredWidth: 120; horizontalAlignment: Text.AlignRight
                             }
                         }
                     }
 
                     Label {
                         anchors.centerIn: parent
+                        width: parent.width - 80
                         visible: items.length === 0 && !controller.busy
                         text: controller ? controller.translate("analyze.emptyHint") : ""
-                        color: Theme.textFaint; font.family: Theme.fontFamily
+                        color: Theme.textFaint; font.family: Theme.fontFamily; font.pixelSize: 12
+                        horizontalAlignment: Text.AlignHCenter
+                        wrapMode: Text.WordWrap
                     }
                     BusyIndicator {
                         anchors.centerIn: parent

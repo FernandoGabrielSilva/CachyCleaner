@@ -140,5 +140,6 @@
   "custom.name": "Custom folder",
   "custom.description": "User-added folder.",
   "notify.cleanDone": "اكتمل التنظيف: تم تحرير %1",
-  "notify.scanDone": "اكتمل الفحص: تم العور على %1 عنصر"
+  "notify.scanDone": "اكتمل الفحص: تم العور على %1 عنصر",
+  "common.clean": "تنظيف"
 }

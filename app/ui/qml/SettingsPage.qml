@@ -33,8 +33,9 @@ Item {
 
     Flickable {
         anchors.fill: parent
-        contentHeight: contentColumn.height + 48
+        contentHeight: contentColumn.height + Theme.pagePadding * 2
         clip: true
+        boundsBehavior: Flickable.StopAtBounds
         ScrollBar.vertical: ScrollBar { policy: ScrollBar.AsNeeded }
 
         ColumnLayout {
@@ -42,33 +43,39 @@ Item {
             anchors.left: parent.left
             anchors.right: parent.right
             anchors.top: parent.top
-            anchors.margins: 36
-            spacing: 18
+            anchors.leftMargin: Theme.pagePadding
+            anchors.rightMargin: Theme.pagePadding
+            anchors.topMargin: Theme.pagePadding
+            spacing: 16
 
             // ---------------------------------------------------------- General
             Card {
                 Layout.fillWidth: true
+                contentMargins: 24
+                contentSpacing: 18
                 ColumnLayout {
-                    anchors.fill: parent
-                    anchors.margins: 24
-                    spacing: 16
+                    Layout.fillWidth: true
+                    spacing: 18
                     SectionTitle { text: controller ? controller.translate("settings.general") : "" }
 
                     RowLayout {
                         Layout.fillWidth: true
-                        spacing: 16
+                        spacing: 20
                         ColumnLayout {
                             Layout.fillWidth: true
-                            spacing: 2
+                            spacing: 4
                             Label { text: controller ? controller.translate("settings.language") : ""; color: Theme.text; font.family: Theme.fontFamily; font.bold: true; font.pixelSize: 12 }
-                            Label { text: controller ? controller.translate("settings.languageHint") : ""; color: Theme.textMuted; font.family: Theme.fontFamily; font.pixelSize: 10; wrapMode: Text.WordWrap }
+                            Label { text: controller ? controller.translate("settings.languageHint") : ""; color: Theme.textMuted; font.family: Theme.fontFamily; font.pixelSize: 10; wrapMode: Text.WordWrap; Layout.fillWidth: true }
                         }
                         ComboBox {
                             id: langCombo
-                            Layout.preferredWidth: 230
+                            Layout.preferredWidth: 240
+                            Layout.preferredHeight: 40
                             model: languages
                             textRole: "name"
                             valueRole: "code"
+                            font.family: Theme.fontFamily
+                            font.pixelSize: 12
                             currentIndex: {
                                 var code = settings.language || "auto"
                                 for (var i = 0; i < languages.length; i++) if (languages[i].code === code) return i
@@ -78,24 +85,26 @@ Item {
                         }
                     }
 
-                    Rectangle { Layout.fillWidth: true; height: 1; color: Theme.border }
+                    Rectangle { Layout.fillWidth: true; Layout.preferredHeight: 1; color: Theme.border }
 
                     RowLayout {
                         Layout.fillWidth: true
-                        spacing: 16
+                        spacing: 20
                         ColumnLayout {
                             Layout.fillWidth: true
-                            spacing: 2
+                            spacing: 4
                             Label { text: controller ? controller.translate("settings.theme") : ""; color: Theme.text; font.family: Theme.fontFamily; font.bold: true; font.pixelSize: 12 }
                         }
                         Segmented {
                             id: themeSegment
+                            Layout.preferredWidth: 280
+                            Layout.preferredHeight: 40
                             model: [
                                 {value: "system", label: controller ? controller.translate("settings.theme.system") : ""},
                                 {value: "light", label: controller ? controller.translate("settings.theme.light") : ""},
                                 {value: "dark", label: controller ? controller.translate("settings.theme.dark") : ""}
                             ]
-                            current: settings.theme || "system"
+                            current: settings.theme || "dark"
                             onSelected: controller.setTheme(value)
                         }
                     }
@@ -105,9 +114,10 @@ Item {
             // ---------------------------------------------------------- Safety
             Card {
                 Layout.fillWidth: true
+                contentMargins: 24
+                contentSpacing: 16
                 ColumnLayout {
-                    anchors.fill: parent
-                    anchors.margins: 24
+                    Layout.fillWidth: true
                     spacing: 16
                     SectionTitle { text: controller ? controller.translate("settings.safety") : "" }
 
@@ -118,6 +128,7 @@ Item {
                         checked: settings.useTrash !== false
                         onToggled: controller.setUseTrash(value)
                     }
+                    Rectangle { Layout.fillWidth: true; Layout.preferredHeight: 1; color: Theme.border }
                     SettingToggle {
                         Layout.fillWidth: true
                         title: controller ? controller.translate("settings.confirm") : ""
@@ -125,27 +136,31 @@ Item {
                         checked: settings.confirm !== false
                         onToggled: controller.setConfirm(value)
                     }
+                    Rectangle { Layout.fillWidth: true; Layout.preferredHeight: 1; color: Theme.border }
                     SettingToggle {
                         Layout.fillWidth: true
                         title: controller ? controller.translate("settings.autoUpdate") : ""
                         checked: settings.autoUpdate !== false
                         onToggled: controller.setAutoUpdate(value)
                     }
+                    Rectangle { Layout.fillWidth: true; Layout.preferredHeight: 1; color: Theme.border }
 
                     RowLayout {
                         Layout.fillWidth: true
-                        spacing: 16
+                        spacing: 20
                         ColumnLayout {
                             Layout.fillWidth: true
-                            spacing: 2
+                            spacing: 4
                             Label { text: controller ? controller.translate("settings.minAge") : ""; color: Theme.text; font.family: Theme.fontFamily; font.bold: true; font.pixelSize: 12 }
-                            Label { text: controller ? controller.translate("settings.minAgeHint") : ""; color: Theme.textMuted; font.family: Theme.fontFamily; font.pixelSize: 10; wrapMode: Text.WordWrap }
+                            Label { text: controller ? controller.translate("settings.minAgeHint") : ""; color: Theme.textMuted; font.family: Theme.fontFamily; font.pixelSize: 10; wrapMode: Text.WordWrap; Layout.fillWidth: true }
                         }
                         SpinBox {
                             id: ageSpin
+                            Layout.preferredWidth: 128
+                            Layout.preferredHeight: 40
                             from: 0; to: 365
                             value: settings.minAge || 0
-                            width: 120
+                            font.family: Theme.fontFamily
                             onValueModified: controller.setMinAge(value)
                         }
                     }
@@ -155,39 +170,51 @@ Item {
             // ---------------------------------------------------- Custom folders
             Card {
                 Layout.fillWidth: true
+                contentMargins: 24
+                contentSpacing: 14
                 ColumnLayout {
-                    anchors.fill: parent
-                    anchors.margins: 24
+                    Layout.fillWidth: true
                     spacing: 14
                     SectionTitle { text: controller ? controller.translate("settings.folders") : "" }
-                    Label { text: controller ? controller.translate("settings.foldersHint") : ""; color: Theme.textMuted; font.family: Theme.fontFamily; font.pixelSize: 10; wrapMode: Text.WordWrap }
+                    Label {
+                        text: controller ? controller.translate("settings.foldersHint") : ""
+                        color: Theme.textMuted; font.family: Theme.fontFamily; font.pixelSize: 10
+                        wrapMode: Text.WordWrap; Layout.fillWidth: true
+                    }
 
                     RowLayout {
                         Layout.fillWidth: true
-                        spacing: 8
+                        spacing: 10
                         TextField {
                             id: folderPathField
                             Layout.fillWidth: true
-                            height: 38
+                            Layout.preferredHeight: 40
+                            leftPadding: 12; rightPadding: 12
                             placeholderText: controller ? controller.translate("settings.path") : ""
                             color: Theme.text; placeholderTextColor: Theme.textFaint
+                            font.family: Theme.fontFamily; font.pixelSize: 12
+                            selectByMouse: true
                             background: Rectangle { radius: Theme.radiusSmall; color: Theme.surfaceAlt; border.color: Theme.border; border.width: 1 }
                         }
                         TextField {
                             id: patternField
-                            Layout.preferredWidth: 90
-                            height: 38
+                            Layout.preferredWidth: 92
+                            Layout.preferredHeight: 40
+                            leftPadding: 12; rightPadding: 12
                             text: "*"
                             placeholderText: "*"
-                            color: Theme.text
+                            color: Theme.text; placeholderTextColor: Theme.textFaint
+                            font.family: Theme.monoFamily; font.pixelSize: 12
+                            selectByMouse: true
                             background: Rectangle { radius: Theme.radiusSmall; color: Theme.surfaceAlt; border.color: Theme.border; border.width: 1 }
                         }
-                        Button {
+                        AppButton {
                             id: addFolderBtn
-                            height: 38
+                            Layout.preferredWidth: 44
+                            Layout.preferredHeight: 40
                             enabled: folderPathField.text.length > 0
-                            background: Rectangle { radius: Theme.radiusSmall; color: enabled ? Theme.accent : Theme.textFaint }
-                            contentItem: Label { text: "+"; color: "white"; font.pixelSize: 18; font.bold: true }
+                            background: Rectangle { radius: Theme.radiusSmall; color: addFolderBtn.enabled ? Theme.accent : Theme.textFaint }
+                            contentItem: Label { text: "+"; color: "white"; font.pixelSize: 18; font.bold: true; horizontalAlignment: Text.AlignHCenter }
                             onClicked: {
                                 if (controller.addCustomFolder(folderPathField.text, patternField.text, "custom", 0)) {
                                     folderPathField.text = ""
@@ -197,28 +224,35 @@ Item {
                         }
                     }
 
-                    Repeater {
-                        model: folders
-                        delegate: Rectangle {
-                            Layout.fillWidth: true
-                            Layout.preferredHeight: 44
-                            radius: Theme.radiusSmall
-                            color: Theme.surfaceAlt
-                            RowLayout {
-                                anchors.fill: parent
-                                anchors.margins: 12
-                                spacing: 10
-                                Label { text: "▣"; color: Theme.accent; font.pixelSize: 13 }
-                                Label {
-                                    text: modelData.paths ? modelData.paths[0] : ""
-                                    color: Theme.text; font.family: Theme.monoFamily; font.pixelSize: 10
-                                    Layout.fillWidth: true; elide: Text.ElideMiddle
-                                }
-                                Button {
-                                    flat: true; width: 30; height: 30
-                                    background: Rectangle { radius: 8; color: Theme.red; opacity: 0.10 }
-                                    contentItem: Label { text: "×"; color: Theme.red; font.pixelSize: 16; font.bold: true }
-                                    onClicked: controller.removeCustomFolder(modelData.id)
+                    ColumnLayout {
+                        Layout.fillWidth: true
+                        spacing: 8
+                        Repeater {
+                            model: folders
+                            delegate: Rectangle {
+                                Layout.fillWidth: true
+                                Layout.preferredHeight: 46
+                                radius: Theme.radiusSmall
+                                color: Theme.surfaceAlt
+                                RowLayout {
+                                    anchors.fill: parent
+                                    anchors.leftMargin: 14
+                                    anchors.rightMargin: 8
+                                    spacing: 10
+                                    Label { text: "▣"; color: Theme.accent; font.pixelSize: 13 }
+                                    Label {
+                                        text: modelData.paths ? modelData.paths[0] : ""
+                                        color: Theme.text; font.family: Theme.monoFamily; font.pixelSize: 10
+                                        Layout.fillWidth: true; elide: Text.ElideMiddle
+                                    }
+                                    AppButton {
+                                        flat: true
+                                        Layout.preferredWidth: 30
+                                        Layout.preferredHeight: 30
+                                        background: Rectangle { radius: 8; color: Qt.rgba(Theme.red.r, Theme.red.g, Theme.red.b, 0.12) }
+                                        contentItem: Label { text: "×"; color: Theme.red; font.pixelSize: 16; font.bold: true; horizontalAlignment: Text.AlignHCenter }
+                                        onClicked: controller.removeCustomFolder(modelData.id)
+                                    }
                                 }
                             }
                         }
@@ -229,32 +263,43 @@ Item {
             // ---------------------------------------------------- Rules
             Card {
                 Layout.fillWidth: true
+                contentMargins: 24
+                contentSpacing: 12
                 ColumnLayout {
-                    anchors.fill: parent
-                    anchors.margins: 24
+                    Layout.fillWidth: true
                     spacing: 10
                     SectionTitle { text: controller ? controller.translate("settings.rules") : "" }
-                    Label { text: controller ? controller.translate("settings.rulesHint") : ""; color: Theme.textMuted; font.family: Theme.fontFamily; font.pixelSize: 10; wrapMode: Text.WordWrap }
+                    Label {
+                        text: controller ? controller.translate("settings.rulesHint") : ""
+                        color: Theme.textMuted; font.family: Theme.fontFamily; font.pixelSize: 10
+                        wrapMode: Text.WordWrap; Layout.fillWidth: true
+                    }
 
-                    Repeater {
-                        model: rules
-                        delegate: RowLayout {
-                            Layout.fillWidth: true
-                            spacing: 12
-                            ColumnLayout {
+                    ColumnLayout {
+                        Layout.fillWidth: true
+                        spacing: 2
+                        Repeater {
+                            model: rules
+                            delegate: RowLayout {
                                 Layout.fillWidth: true
-                                spacing: 1
-                                Label { text: modelData.displayName || modelData.name; color: Theme.text; font.family: Theme.fontFamily; font.pixelSize: 11 }
-                                Label { text: modelData.displayDescription || modelData.description; color: Theme.textFaint; font.family: Theme.fontFamily; font.pixelSize: 9; elide: Text.ElideRight; Layout.fillWidth: true }
-                            }
-                            Label {
-                                text: modelData.displayCategory || ""
-                                color: Theme.textMuted; font.family: Theme.fontFamily; font.pixelSize: 9
-                                Layout.preferredWidth: 90
-                            }
-                            Toggle {
-                                checked: modelData.enabled
-                                onToggled: controller.setRuleEnabled(modelData.id, value)
+                                Layout.preferredHeight: 46
+                                spacing: 12
+                                ColumnLayout {
+                                    Layout.fillWidth: true
+                                    spacing: 2
+                                    Label { text: modelData.displayName || modelData.name; color: Theme.text; font.family: Theme.fontFamily; font.pixelSize: 11 }
+                                    Label { text: modelData.displayDescription || modelData.description; color: Theme.textFaint; font.family: Theme.fontFamily; font.pixelSize: 9; elide: Text.ElideRight; Layout.fillWidth: true }
+                                }
+                                Label {
+                                    text: modelData.displayCategory || ""
+                                    color: Theme.textMuted; font.family: Theme.fontFamily; font.pixelSize: 9
+                                    Layout.preferredWidth: 96
+                                    elide: Text.ElideRight
+                                }
+                                Toggle {
+                                    checked: modelData.enabled
+                                    onToggled: controller.setRuleEnabled(modelData.id, value)
+                                }
                             }
                         }
                     }
@@ -264,43 +309,75 @@ Item {
             // ---------------------------------------------------- Exclusions
             Card {
                 Layout.fillWidth: true
+                contentMargins: 24
+                contentSpacing: 12
                 ColumnLayout {
-                    anchors.fill: parent
-                    anchors.margins: 24
+                    Layout.fillWidth: true
                     spacing: 12
                     SectionTitle { text: controller ? controller.translate("settings.exclusions") : "" }
-                    Label { text: controller ? controller.translate("settings.exclusionsHint") : ""; color: Theme.textMuted; font.family: Theme.fontFamily; font.pixelSize: 10; wrapMode: Text.WordWrap }
+                    Label {
+                        text: controller ? controller.translate("settings.exclusionsHint") : ""
+                        color: Theme.textMuted; font.family: Theme.fontFamily; font.pixelSize: 10
+                        wrapMode: Text.WordWrap; Layout.fillWidth: true
+                    }
 
                     RowLayout {
                         Layout.fillWidth: true
-                        Button {
-                            flat: true; height: 36
-                            background: Rectangle { radius: Theme.radiusSmall; color: Theme.surfaceAlt }
-                            contentItem: Label { text: "+ " + (controller ? controller.translate("settings.addExclusion") : ""); color: Theme.accent; font.family: Theme.fontFamily; font.pixelSize: 11 }
-                            onClicked: controller.addExclusion(exclusionField.text)
-                        }
+                        spacing: 10
                         TextField {
                             id: exclusionField
                             Layout.fillWidth: true
-                            height: 36
+                            Layout.preferredHeight: 40
+                            leftPadding: 12; rightPadding: 12
                             placeholderText: controller ? controller.translate("settings.path") : ""
                             color: Theme.text; placeholderTextColor: Theme.textFaint
+                            font.family: Theme.fontFamily; font.pixelSize: 12
+                            selectByMouse: true
                             background: Rectangle { radius: Theme.radiusSmall; color: Theme.surfaceAlt; border.color: Theme.border; border.width: 1 }
                         }
+                        AppButton {
+                            flat: true
+                            Layout.preferredHeight: 40
+                            leftPadding: 16; rightPadding: 16
+                            background: Rectangle { radius: Theme.radiusSmall; color: Qt.rgba(Theme.accent.r, Theme.accent.g, Theme.accent.b, 0.14) }
+                            contentItem: Label {
+                                text: "+ " + (controller ? controller.translate("settings.addExclusion") : "")
+                                color: Theme.accent; font.family: Theme.fontFamily; font.pixelSize: 11
+                                horizontalAlignment: Text.AlignHCenter
+                            }
+                            onClicked: {
+                                if (controller.addExclusion(exclusionField.text)) exclusionField.text = ""
+                            }
+                        }
                     }
-                    Repeater {
-                        model: exclusions
-                        delegate: Rectangle {
-                            Layout.fillWidth: true; Layout.preferredHeight: 36
-                            radius: Theme.radiusSmall; color: Theme.surfaceAlt
-                            RowLayout {
-                                anchors.fill: parent; anchors.margins: 10
-                                Label { text: modelData; color: Theme.textMuted; font.family: Theme.monoFamily; font.pixelSize: 10; Layout.fillWidth: true; elide: Text.ElideMiddle }
-                                Button {
-                                    flat: true; width: 26; height: 26
-                                    background: Rectangle { radius: 7; color: Theme.red; opacity: 0.10 }
-                                    contentItem: Label { text: "×"; color: Theme.red; font.pixelSize: 14 }
-                                    onClicked: controller.removeExclusion(modelData)
+
+                    ColumnLayout {
+                        Layout.fillWidth: true
+                        spacing: 8
+                        Repeater {
+                            model: exclusions
+                            delegate: Rectangle {
+                                Layout.fillWidth: true
+                                Layout.preferredHeight: 40
+                                radius: Theme.radiusSmall
+                                color: Theme.surfaceAlt
+                                RowLayout {
+                                    anchors.fill: parent
+                                    anchors.leftMargin: 12
+                                    anchors.rightMargin: 6
+                                    spacing: 8
+                                    Label {
+                                        text: modelData; color: Theme.textMuted; font.family: Theme.monoFamily; font.pixelSize: 10
+                                        Layout.fillWidth: true; elide: Text.ElideMiddle
+                                    }
+                                    AppButton {
+                                        flat: true
+                                        Layout.preferredWidth: 28
+                                        Layout.preferredHeight: 28
+                                        background: Rectangle { radius: 7; color: Qt.rgba(Theme.red.r, Theme.red.g, Theme.red.b, 0.12) }
+                                        contentItem: Label { text: "×"; color: Theme.red; font.pixelSize: 15; horizontalAlignment: Text.AlignHCenter }
+                                        onClicked: controller.removeExclusion(modelData)
+                                    }
                                 }
                             }
                         }
@@ -311,48 +388,70 @@ Item {
             // ---------------------------------------------------- Updates
             Card {
                 Layout.fillWidth: true
+                contentMargins: 24
+                contentSpacing: 12
                 ColumnLayout {
-                    anchors.fill: parent
-                    anchors.margins: 24
-                    spacing: 12
+                    Layout.fillWidth: true
+                    spacing: 14
                     SectionTitle { text: controller ? controller.translate("settings.updates") : "" }
                     RowLayout {
                         Layout.fillWidth: true
+                        spacing: 12
                         ColumnLayout {
                             Layout.fillWidth: true
+                            spacing: 3
                             Label {
                                 text: {
-                                    if (updateInfo.error) return controller.translate("settings.updateFailed", updateInfo.error)
-                                    if (updateInfo.available) return controller.translate("settings.updateAvailable", updateInfo.latest)
+                                    if (updateInfo.error) return controller.translateArg("settings.updateFailed", updateInfo.error)
+                                    if (updateInfo.available) return controller.translateArg("settings.updateAvailable", updateInfo.latest)
                                     return controller.translate("settings.upToDate")
                                 }
                                 color: updateInfo.available ? Theme.amber : Theme.text
-                                font.family: Theme.fontFamily; font.pixelSize: 11; wrapMode: Text.WordWrap
+                                font.family: Theme.fontFamily; font.pixelSize: 11
+                                wrapMode: Text.WordWrap; Layout.fillWidth: true
                             }
-                            Label { text: controller.appVersion; color: Theme.textFaint; font.family: Theme.fontFamily; font.pixelSize: 10 }
+                            Label { text: controller.appVersion; color: Theme.textFaint; font.family: Theme.monoFamily; font.pixelSize: 10 }
                         }
-                        Button {
-                            flat: true; height: 36
-                            background: Rectangle { radius: Theme.radiusSmall; color: Theme.accent; opacity: 0.14 }
-                            contentItem: Label { text: controller ? controller.translate("settings.checkNow") : ""; color: Theme.accent; font.family: Theme.fontFamily; font.pixelSize: 11 }
+                        AppButton {
+                            flat: true
+                            Layout.preferredHeight: 38
+                            leftPadding: 16; rightPadding: 16
+                            background: Rectangle { radius: Theme.radiusSmall; color: Qt.rgba(Theme.accent.r, Theme.accent.g, Theme.accent.b, 0.14) }
+                            contentItem: Label {
+                                text: controller ? controller.translate("settings.checkNow") : ""
+                                color: Theme.accent; font.family: Theme.fontFamily; font.pixelSize: 11
+                                horizontalAlignment: Text.AlignHCenter
+                            }
                             onClicked: controller.checkForUpdates()
                         }
-                        Button {
+                        AppButton {
                             visible: updateInfo.available === true
-                            flat: true; height: 36
-                            background: Rectangle { radius: Theme.radiusSmall; color: Theme.green; opacity: 0.14 }
-                            contentItem: Label { text: controller ? controller.translate("settings.download") : ""; color: Theme.green; font.family: Theme.fontFamily; font.pixelSize: 11 }
+                            flat: true
+                            Layout.preferredHeight: 38
+                            leftPadding: 16; rightPadding: 16
+                            background: Rectangle { radius: Theme.radiusSmall; color: Qt.rgba(Theme.green.r, Theme.green.g, Theme.green.b, 0.14) }
+                            contentItem: Label {
+                                text: controller ? controller.translate("settings.download") : ""
+                                color: Theme.green; font.family: Theme.fontFamily; font.pixelSize: 11
+                                horizontalAlignment: Text.AlignHCenter
+                            }
                             onClicked: controller.openReleases()
                         }
                     }
                 }
             }
 
-            Button {
+            AppButton {
                 Layout.alignment: Qt.AlignRight
-                flat: true; height: 36
-                background: Rectangle { radius: Theme.radiusSmall; color: Theme.red; opacity: 0.10 }
-                contentItem: Label { text: controller ? controller.translate("settings.reset") : ""; color: Theme.red; font.family: Theme.fontFamily; font.pixelSize: 11 }
+                flat: true
+                Layout.preferredHeight: 38
+                leftPadding: 16; rightPadding: 16
+                background: Rectangle { radius: Theme.radiusSmall; color: Qt.rgba(Theme.red.r, Theme.red.g, Theme.red.b, 0.12) }
+                contentItem: Label {
+                    text: controller ? controller.translate("settings.reset") : ""
+                    color: Theme.red; font.family: Theme.fontFamily; font.pixelSize: 11
+                    horizontalAlignment: Text.AlignHCenter
+                }
                 onClicked: resetDialog.open()
             }
         }
@@ -361,12 +460,74 @@ Item {
     Dialog {
         id: resetDialog
         anchors.centerIn: parent
-        width: 380
+        width: 420
         modal: true
-        title: controller ? controller.translate("settings.reset") : ""
-        standardButtons: Dialog.Cancel | Dialog.Ok
+        padding: 0
+        closePolicy: Popup.CloseOnEscape
         background: Rectangle { color: Theme.surface; radius: Theme.radius; border.color: Theme.border; border.width: 1 }
-        Label { anchors.fill: parent; anchors.margins: 20; text: controller ? controller.translate("settings.resetConfirm") : ""; color: Theme.textMuted; wrapMode: Text.WordWrap; font: Theme.fontBody }
-        onAccepted: { controller.resetSettings(); refreshAll() }
+
+        header: Label {
+            text: controller ? controller.translate("settings.reset") : ""
+            color: Theme.text
+            font.family: Theme.fontFamily
+            font.pixelSize: 16
+            font.bold: true
+            leftPadding: 26
+            rightPadding: 26
+            topPadding: 24
+            bottomPadding: 0
+        }
+
+        contentItem: Label {
+            text: controller ? controller.translate("settings.resetConfirm") : ""
+            color: Theme.textMuted
+            wrapMode: Text.WordWrap
+            font.family: Theme.fontFamily
+            font.pixelSize: 12
+            lineHeight: 1.35
+        }
+
+        footer: Item {
+            implicitHeight: 76
+            RowLayout {
+                anchors.fill: parent
+                anchors.leftMargin: 26
+                anchors.rightMargin: 26
+                anchors.bottomMargin: 22
+                anchors.topMargin: 8
+                spacing: 10
+                Item { Layout.fillWidth: true }
+                AppButton {
+                    flat: true
+                    Layout.preferredHeight: 40
+                    leftPadding: 18
+                    rightPadding: 18
+                    background: Rectangle { radius: Theme.radiusSmall; color: Theme.surfaceAlt; border.color: Theme.border; border.width: 1 }
+                    contentItem: Label {
+                        text: controller ? controller.translate("common.cancel") : ""
+                        color: Theme.text; font.family: Theme.fontFamily; font.pixelSize: 11
+                        horizontalAlignment: Text.AlignHCenter
+                    }
+                    onClicked: resetDialog.close()
+                }
+                AppButton {
+                    flat: true
+                    Layout.preferredHeight: 40
+                    leftPadding: 20
+                    rightPadding: 20
+                    background: Rectangle { radius: Theme.radiusSmall; color: Theme.red }
+                    contentItem: Label {
+                        text: controller ? controller.translate("settings.reset") : ""
+                        color: "white"; font.family: Theme.fontFamily; font.pixelSize: 11; font.bold: true
+                        horizontalAlignment: Text.AlignHCenter
+                    }
+                    onClicked: {
+                        resetDialog.close()
+                        controller.resetSettings()
+                        refreshAll()
+                    }
+                }
+            }
+        }
     }
 }

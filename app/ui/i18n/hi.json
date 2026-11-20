@@ -140,5 +140,6 @@
   "custom.name": "Custom folder",
   "custom.description": "User-added folder.",
   "notify.cleanDone": "सफ़ाई पूरी: %1 मुक्त",
-  "notify.scanDone": "स्कैन पूर्ण: %1 आइटम मिले"
+  "notify.scanDone": "स्कैन पूर्ण: %1 आइटम मिले",
+  "common.clean": "साफ़ करें"
 }

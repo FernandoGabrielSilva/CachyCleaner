@@ -9,8 +9,9 @@ Item {
 
     Flickable {
         anchors.fill: parent
-        contentHeight: contentColumn.height + 48
+        contentHeight: contentColumn.height + Theme.pagePadding * 2
         clip: true
+        boundsBehavior: Flickable.StopAtBounds
         ScrollBar.vertical: ScrollBar { policy: ScrollBar.AsNeeded }
 
         ColumnLayout {
@@ -18,30 +19,36 @@ Item {
             anchors.left: parent.left
             anchors.right: parent.right
             anchors.top: parent.top
-            anchors.margins: 36
-            spacing: 18
+            anchors.leftMargin: Theme.pagePadding
+            anchors.rightMargin: Theme.pagePadding
+            anchors.topMargin: Theme.pagePadding
+            spacing: 16
 
             Card {
                 Layout.fillWidth: true
-                Layout.preferredHeight: 220
-                color: Theme.surfaceAlt
-
+                Layout.preferredHeight: 224
+                cardColor: Theme.surfaceAlt
+                contentMargins: 24
                 ColumnLayout {
-                    anchors.centerIn: parent
-                    spacing: 10
+                    Layout.alignment: Qt.AlignHCenter
+                    spacing: 12
                     Rectangle {
-                        Layout.preferredWidth: 64
-
-                        Layout.preferredHeight: 64
-                        radius: 18
+                        Layout.alignment: Qt.AlignHCenter
+                        Layout.preferredWidth: 68
+                        Layout.preferredHeight: 68
+                        radius: 20
                         color: Theme.accent
                         Rectangle {
                             anchors.centerIn: parent
-                            width: 28; height: 28; radius: 8; color: "white"; rotation: 45
-                            Rectangle { anchors.centerIn: parent; width: 12; height: 12; radius: 4; color: Theme.accent }
+                            width: 30; height: 30; radius: 9; color: "white"; rotation: 45
+                            Rectangle { anchors.centerIn: parent; width: 13; height: 13; radius: 4; color: Theme.accent }
                         }
                     }
-                    Label { text: "CachyCleaner"; color: Theme.text; font.pixelSize: 26; font.bold: true; Layout.alignment: Qt.AlignHCenter }
+                    Label {
+                        text: "CachyCleaner"
+                        color: Theme.text; font.family: Theme.fontFamily; font.pixelSize: 26; font.bold: true
+                        Layout.alignment: Qt.AlignHCenter
+                    }
                     Label {
                         text: controller ? controller.translate("app.tagline") : ""
                         color: Theme.textMuted; font.family: Theme.fontFamily; font.pixelSize: 12
@@ -52,13 +59,19 @@ Item {
 
             Card {
                 Layout.fillWidth: true
+                contentMargins: 24
+                contentSpacing: 16
                 ColumnLayout {
-                    anchors.fill: parent
-                    anchors.margins: 24
-                    spacing: 14
-                    Label { text: controller ? controller.translate("about.description") : ""; color: Theme.textMuted; font.family: Theme.fontFamily; font.pixelSize: 11; wrapMode: Text.WordWrap }
+                    Layout.fillWidth: true
+                    spacing: 16
+                    Label {
+                        text: controller ? controller.translate("about.description") : ""
+                        color: Theme.textMuted; font.family: Theme.fontFamily; font.pixelSize: 12
+                        lineHeight: 1.4
+                        wrapMode: Text.WordWrap; Layout.fillWidth: true
+                    }
 
-                    Rectangle { Layout.fillWidth: true; height: 1; color: Theme.border }
+                    Rectangle { Layout.fillWidth: true; Layout.preferredHeight: 1; color: Theme.border }
 
                     RowLayout {
                         Layout.fillWidth: true
@@ -74,25 +87,38 @@ Item {
                     }
                     RowLayout {
                         Layout.fillWidth: true
-                        Label { text: controller ? controller.translate("about.builtWith") : ""; color: Theme.textFaint; font.family: Theme.fontFamily; font.pixelSize: 10 }
+                        Label { text: controller ? controller.translate("about.builtWith") : ""; color: Theme.textFaint; font.family: Theme.fontFamily; font.pixelSize: 10; Layout.fillWidth: true; wrapMode: Text.WordWrap }
                     }
 
                     RowLayout {
                         Layout.fillWidth: true
-                        Layout.topMargin: 8
+                        Layout.topMargin: 4
                         spacing: 10
-                        Button {
-                            flat: true; height: 38
-                            background: Rectangle { radius: Theme.radiusSmall; color: Theme.accent; opacity: 0.14 }
-                            contentItem: Label { text: controller ? controller.translate("about.github") : ""; color: Theme.accent; font.family: Theme.fontFamily; font.pixelSize: 11 }
+                        AppButton {
+                            flat: true
+                            Layout.preferredHeight: 40
+                            leftPadding: 18; rightPadding: 18
+                            background: Rectangle { radius: Theme.radiusSmall; color: Qt.rgba(Theme.accent.r, Theme.accent.g, Theme.accent.b, 0.14) }
+                            contentItem: Label {
+                                text: controller ? controller.translate("about.github") : ""
+                                color: Theme.accent; font.family: Theme.fontFamily; font.pixelSize: 11
+                                horizontalAlignment: Text.AlignHCenter
+                            }
                             onClicked: controller.openReleases()
                         }
-                        Button {
-                            flat: true; height: 38
-                            background: Rectangle { radius: Theme.radiusSmall; color: Theme.surfaceAlt }
-                            contentItem: Label { text: controller ? controller.translate("about.checkUpdate") : ""; color: Theme.text; font.family: Theme.fontFamily; font.pixelSize: 11 }
+                        AppButton {
+                            flat: true
+                            Layout.preferredHeight: 40
+                            leftPadding: 18; rightPadding: 18
+                            background: Rectangle { radius: Theme.radiusSmall; color: Theme.surfaceAlt; border.color: Theme.border; border.width: 1 }
+                            contentItem: Label {
+                                text: controller ? controller.translate("about.checkUpdate") : ""
+                                color: Theme.text; font.family: Theme.fontFamily; font.pixelSize: 11
+                                horizontalAlignment: Text.AlignHCenter
+                            }
                             onClicked: controller.checkForUpdates()
                         }
+                        Item { Layout.fillWidth: true }
                     }
                 }
             }

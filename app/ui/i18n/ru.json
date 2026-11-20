@@ -140,5 +140,6 @@
   "custom.name": "Custom folder",
   "custom.description": "User-added folder.",
   "notify.cleanDone": "Очистка завершена: освобождено %1",
-  "notify.scanDone": "Сканирование завершено: найдено %1"
+  "notify.scanDone": "Сканирование завершено: найдено %1",
+  "common.clean": "Очистить"
 }

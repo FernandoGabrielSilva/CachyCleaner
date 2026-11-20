@@ -212,9 +212,17 @@ class AppController(QObject):
         )
 
     # ---------------------------------------------------------------- slots: scan
-    @Slot(str)
+    @Slot(str, result=str)
     def translate(self, key: str) -> str:
         return self.tr(key)
+
+    @Slot(str, str, result=str)
+    def translateArg(self, key: str, arg: str) -> str:
+        return self.tr(key, arg)
+
+    @Slot(str, str, str, result=str)
+    def translateArgs(self, key: str, arg1: str, arg2: str) -> str:
+        return self.tr(key, arg1, arg2)
 
     @Slot()
     def startScan(self) -> None:
@@ -457,6 +465,20 @@ class AppController(QObject):
         else:
             app.styleHints().setColorScheme(Qt.ColorScheme.Unknown)
 
+    @Property(str, notify=themeChanged)
+    def effectiveTheme(self) -> str:
+        """Resolved theme: 'dark' or 'light' (defaults to dark)."""
+        theme = str(self.settings.get("theme", "dark"))
+        if theme in ("dark", "light"):
+            return theme
+        app = QGuiApplication.instance()
+        if app is not None:
+            from PySide6.QtCore import Qt
+
+            if app.styleHints().colorScheme() == Qt.ColorScheme.Light:
+                return "light"
+        return "dark"
+
     @Slot(bool)
     def setUseTrash(self, value: bool) -> None:
         self.settings.set("use_trash", value)
@@ -487,7 +509,7 @@ class AppController(QObject):
         self.engine.set_min_age(rule_id, days)
         self.rulesChanged.emit()
 
-    @Slot(str, str, str, int)
+    @Slot(str, str, str, int, result=bool)
     def addCustomFolder(self, path: str, pattern: str, category: str, min_age: int) -> bool:
         if not path.strip():
             return False
@@ -503,7 +525,7 @@ class AppController(QObject):
         self.rulesChanged.emit()
         self.customFoldersChanged.emit()
 
-    @Slot(str)
+    @Slot(str, result=bool)
     def addExclusion(self, path: str) -> bool:
         if not path.strip():
             return False

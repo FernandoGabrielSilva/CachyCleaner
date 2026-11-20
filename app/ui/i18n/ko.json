@@ -140,5 +140,6 @@
   "custom.name": "Custom folder",
   "custom.description": "User-added folder.",
   "notify.cleanDone": "정리 완료: %1 확보",
-  "notify.scanDone": "분석 완료: %1개 발견"
+  "notify.scanDone": "분석 완료: %1개 발견",
+  "common.clean": "정리"
 }

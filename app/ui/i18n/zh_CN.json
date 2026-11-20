@@ -140,5 +140,6 @@
   "custom.name": "Custom folder",
   "custom.description": "User-added folder.",
   "notify.cleanDone": "清理完成：已释放 %1",
-  "notify.scanDone": "扫描完成：找到 %1 个项目"
+  "notify.scanDone": "扫描完成：找到 %1 个项目",
+  "common.clean": "清理"
 }

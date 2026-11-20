@@ -13,7 +13,7 @@ from .system import SYSTEM, home, xdg
 
 DEFAULTS: dict[str, Any] = {
     "language": "auto",
-    "theme": "system",
+    "theme": "dark",
     "use_trash": True,
     "confirm_before_clean": True,
     "min_age_days": 0,

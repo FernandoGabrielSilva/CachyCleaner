@@ -140,5 +140,6 @@
   "custom.name": "Custom folder",
   "custom.description": "User-added folder.",
   "notify.cleanDone": "クリーンアップ完了: %1 を解放",
-  "notify.scanDone": "解析完了: %1 件検出"
+  "notify.scanDone": "解析完了: %1 件検出",
+  "common.clean": "クリーン"
 }

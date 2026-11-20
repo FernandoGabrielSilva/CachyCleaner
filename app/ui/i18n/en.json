@@ -140,5 +140,6 @@
   "custom.name": "Custom folder",
   "custom.description": "User-added folder.",
   "notify.cleanDone": "Cleanup complete: %1 freed",
-  "notify.scanDone": "Scan complete: %1 items found"
+  "notify.scanDone": "Scan complete: %1 items found",
+  "common.clean": "Clean"
 }

@@ -140,5 +140,6 @@
   "custom.name": "Custom folder",
   "custom.description": "User-added folder.",
   "notify.cleanDone": "Bereinigung abgeschlossen: %1 freigegeben",
-  "notify.scanDone": "Analyse abgeschlossen: %1 Elemente gefunden"
+  "notify.scanDone": "Analyse abgeschlossen: %1 Elemente gefunden",
+  "common.clean": "Bereinigen"
 }

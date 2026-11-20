@@ -140,5 +140,6 @@
   "custom.name": "Custom folder",
   "custom.description": "User-added folder.",
   "notify.cleanDone": "Nettoyage terminé : %1 libérés",
-  "notify.scanDone": "Analyse terminée : %1 éléments trouvés"
+  "notify.scanDone": "Analyse terminée : %1 éléments trouvés",
+  "common.clean": "Nettoyer"
 }
