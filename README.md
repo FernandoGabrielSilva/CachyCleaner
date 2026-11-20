@@ -19,7 +19,7 @@
 | 🌍 **13 idiomas** | PT-BR, EN, ES, FR, DE, IT, JA, KO, ZH-CN, RU, HI, AR + detecção automática pelo locale do sistema. |
 | 🎨 **Interface moderna** | QML com design system próprio: tema claro/escuro/sistema, animações suaves, High-DPI e fontes Inter/JetBrains Mono. |
 | ⬆️ **Verificação de atualizações** | Consulta a API de releases do GitHub, avisa quando há versão nova e abre a página de download. |
-| 📦 **Múltiplos formatos** | AppImage, `.deb`, `.rpm`, `.pacman`, `.tar.gz`, `.msi`, `.dmg`, `.exe` portátil e `.app`, para x86_64, ARM64 e mais. |
+| 📦 **Múltiplos formatos** | AppImage, `.deb`, `.pkg.tar.zst` (pacman/Arch/CachyOS), `.tar.gz`, `.msi`, `.dmg`, `.zip` portátil e `.app`, para x86_64 e ARM64. |
 
 ---
 
@@ -30,7 +30,7 @@ Acesse **[Releases](https://github.com/FernandoGabrielSilva/CachyCleaner/release
 
 | Sistema | Formatos |
 |---|---|
-| Linux | `.AppImage`, `.deb`, `.rpm`, `.pkg.tar.zst`, `.tar.gz` |
+| Linux | `.AppImage`, `.deb`, `.pkg.tar.zst`, `.tar.gz` |
 | Windows | `.msi`, `.exe` portátil (x86_64 / ARM64) |
 | macOS | `.dmg`, `.app` (Intel / Apple Silicon) |
 
@@ -130,6 +130,15 @@ O resultado fica em `dist/CachyCleaner/`.
 ```bash
 cd packaging/linux
 ./build-appimage.sh
+```
+
+### Gerar pacote pacman (Arch/CachyOS)
+
+```bash
+cd packaging/linux
+./build-pacman.sh
+# instalar:
+sudo pacman -U cachycleaner-1.0.0-1-x86_64.pkg.tar.zst
 ```
 
 ---

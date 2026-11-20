@@ -35,7 +35,7 @@ jobs:
           sudo apt-get install -y libegl1 libgl1 libxkbcommon-x11-0 libxcb-cursor0 \
             libxcb-icccm4 libxcb-image0 libxcb-keysyms1 libxcb-randr0 \
             libxcb-render-util0 libxcb-shape0 libxcb-xinerama0 libxcb-xkb1 \
-            libdbus-1-3 libfuse2 desktop-file-utils curl alien rpm
+            libdbus-1-3 libfuse2 desktop-file-utils curl libarchive-tools zstd
 
       - name: Install Python deps
         run: |
@@ -51,13 +51,12 @@ jobs:
           mkdir -p dist/packages
           tar -czf "dist/packages/CachyCleaner-1.0.0-linux-${{ matrix.arch }}.tar.gz" -C dist CachyCleaner
 
-      - name: Build packages (deb/rpm)
+      - name: Build deb package
         if: matrix.arch == 'x86_64'
         run: |
           set -e
           VERSION=1.0.0
           mkdir -p dist/packages
-          # --- deb
           sudo apt-get install -y dpkg-dev
           DEB="dist/packages/cachycleaner_${VERSION}_amd64.deb"
           mkdir -p debpkg/DEBIAN debpkg/usr/share/applications debpkg/usr/share/icons/hicolor/256x256/apps debpkg/usr/lib/CachyCleaner
@@ -82,8 +81,13 @@ jobs:
            CachyCleaner finds and safely removes caches, temporary files and junk.
           EOF
           dpkg-deb --build debpkg "$DEB"
-          # --- rpm (via alien)
-          alien -r --scripts "$DEB" --target-dir dist/packages || true
+
+      - name: Build pacman package
+        if: matrix.arch == 'x86_64'
+        run: |
+          chmod +x packaging/linux/build-pacman.sh
+          ARCH=x86_64 ./packaging/linux/build-pacman.sh --skip-build
+          mv cachycleaner-*.pkg.tar.zst dist/packages/
 
       - name: Build AppImage
         run: |
