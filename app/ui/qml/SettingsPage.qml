@@ -65,7 +65,7 @@ Item {
                             Layout.fillWidth: true
                             spacing: 4
                             Label { text: controller ? controller.translate("settings.language") : ""; color: Theme.text; font.family: Theme.fontFamily; font.bold: true; font.pixelSize: 12 }
-                            Label { text: controller ? controller.translate("settings.languageHint") : ""; color: Theme.textMuted; font.family: Theme.fontFamily; font.pixelSize: 10; wrapMode: Text.WordWrap; Layout.fillWidth: true }
+                            Label { text: controller ? controller.translate("settings.languageHint") : ""; color: Theme.textMuted; font.family: Theme.fontFamily; font.pixelSize: 11; wrapMode: Text.WordWrap; Layout.fillWidth: true }
                         }
                         ComboBox {
                             id: langCombo
@@ -152,7 +152,7 @@ Item {
                             Layout.fillWidth: true
                             spacing: 4
                             Label { text: controller ? controller.translate("settings.minAge") : ""; color: Theme.text; font.family: Theme.fontFamily; font.bold: true; font.pixelSize: 12 }
-                            Label { text: controller ? controller.translate("settings.minAgeHint") : ""; color: Theme.textMuted; font.family: Theme.fontFamily; font.pixelSize: 10; wrapMode: Text.WordWrap; Layout.fillWidth: true }
+                            Label { text: controller ? controller.translate("settings.minAgeHint") : ""; color: Theme.textMuted; font.family: Theme.fontFamily; font.pixelSize: 11; wrapMode: Text.WordWrap; Layout.fillWidth: true }
                         }
                         SpinBox {
                             id: ageSpin
@@ -178,7 +178,7 @@ Item {
                     SectionTitle { text: controller ? controller.translate("settings.folders") : "" }
                     Label {
                         text: controller ? controller.translate("settings.foldersHint") : ""
-                        color: Theme.textMuted; font.family: Theme.fontFamily; font.pixelSize: 10
+                        color: Theme.textMuted; font.family: Theme.fontFamily; font.pixelSize: 11
                         wrapMode: Text.WordWrap; Layout.fillWidth: true
                     }
 
@@ -209,6 +209,7 @@ Item {
                             background: Rectangle { radius: Theme.radiusSmall; color: Theme.surfaceAlt; border.color: Theme.border; border.width: 1 }
                         }
                         AppButton {
+                            objectName: "SettingsPage_AppButton_1"
                             id: addFolderBtn
                             Layout.preferredWidth: 44
                             Layout.preferredHeight: 40
@@ -242,10 +243,11 @@ Item {
                                     Label { text: "▣"; color: Theme.accent; font.pixelSize: 13 }
                                     Label {
                                         text: modelData.paths ? modelData.paths[0] : ""
-                                        color: Theme.text; font.family: Theme.monoFamily; font.pixelSize: 10
+                                        color: Theme.text; font.family: Theme.monoFamily; font.pixelSize: 11
                                         Layout.fillWidth: true; elide: Text.ElideMiddle
                                     }
                                     AppButton {
+                                        objectName: "SettingsPage_AppButton_2"
                                         flat: true
                                         Layout.preferredWidth: 30
                                         Layout.preferredHeight: 30
@@ -271,7 +273,7 @@ Item {
                     SectionTitle { text: controller ? controller.translate("settings.rules") : "" }
                     Label {
                         text: controller ? controller.translate("settings.rulesHint") : ""
-                        color: Theme.textMuted; font.family: Theme.fontFamily; font.pixelSize: 10
+                        color: Theme.textMuted; font.family: Theme.fontFamily; font.pixelSize: 11
                         wrapMode: Text.WordWrap; Layout.fillWidth: true
                     }
 
@@ -288,11 +290,11 @@ Item {
                                     Layout.fillWidth: true
                                     spacing: 2
                                     Label { text: modelData.displayName || modelData.name; color: Theme.text; font.family: Theme.fontFamily; font.pixelSize: 11 }
-                                    Label { text: modelData.displayDescription || modelData.description; color: Theme.textFaint; font.family: Theme.fontFamily; font.pixelSize: 9; elide: Text.ElideRight; Layout.fillWidth: true }
+                                    Label { text: modelData.displayDescription || modelData.description; color: Theme.textFaint; font.family: Theme.fontFamily; font.pixelSize: 11; elide: Text.ElideRight; Layout.fillWidth: true }
                                 }
                                 Label {
                                     text: modelData.displayCategory || ""
-                                    color: Theme.textMuted; font.family: Theme.fontFamily; font.pixelSize: 9
+                                    color: Theme.textMuted; font.family: Theme.fontFamily; font.pixelSize: 11
                                     Layout.preferredWidth: 96
                                     elide: Text.ElideRight
                                 }
@@ -317,7 +319,7 @@ Item {
                     SectionTitle { text: controller ? controller.translate("settings.exclusions") : "" }
                     Label {
                         text: controller ? controller.translate("settings.exclusionsHint") : ""
-                        color: Theme.textMuted; font.family: Theme.fontFamily; font.pixelSize: 10
+                        color: Theme.textMuted; font.family: Theme.fontFamily; font.pixelSize: 11
                         wrapMode: Text.WordWrap; Layout.fillWidth: true
                     }
 
@@ -336,6 +338,7 @@ Item {
                             background: Rectangle { radius: Theme.radiusSmall; color: Theme.surfaceAlt; border.color: Theme.border; border.width: 1 }
                         }
                         AppButton {
+                            objectName: "SettingsPage_AppButton_3"
                             flat: true
                             Layout.preferredHeight: 40
                             leftPadding: 16; rightPadding: 16
@@ -367,10 +370,11 @@ Item {
                                     anchors.rightMargin: 6
                                     spacing: 8
                                     Label {
-                                        text: modelData; color: Theme.textMuted; font.family: Theme.monoFamily; font.pixelSize: 10
+                                        text: modelData; color: Theme.textMuted; font.family: Theme.monoFamily; font.pixelSize: 11
                                         Layout.fillWidth: true; elide: Text.ElideMiddle
                                     }
                                     AppButton {
+                                        objectName: "SettingsPage_AppButton_4"
                                         flat: true
                                         Layout.preferredWidth: 28
                                         Layout.preferredHeight: 28
@@ -410,9 +414,10 @@ Item {
                                 font.family: Theme.fontFamily; font.pixelSize: 11
                                 wrapMode: Text.WordWrap; Layout.fillWidth: true
                             }
-                            Label { text: controller.appVersion; color: Theme.textFaint; font.family: Theme.monoFamily; font.pixelSize: 10 }
+                            Label { text: controller.appVersion; color: Theme.textFaint; font.family: Theme.monoFamily; font.pixelSize: 11 }
                         }
                         AppButton {
+                            objectName: "settingsCheckNow"
                             flat: true
                             Layout.preferredHeight: 38
                             leftPadding: 16; rightPadding: 16
@@ -425,6 +430,7 @@ Item {
                             onClicked: controller.checkForUpdates()
                         }
                         AppButton {
+                            objectName: "settingsDownload"
                             visible: updateInfo.available === true
                             flat: true
                             Layout.preferredHeight: 38
@@ -442,6 +448,7 @@ Item {
             }
 
             AppButton {
+                objectName: "SettingsPage_AppButton_7"
                 Layout.alignment: Qt.AlignRight
                 flat: true
                 Layout.preferredHeight: 38
@@ -498,6 +505,7 @@ Item {
                 spacing: 10
                 Item { Layout.fillWidth: true }
                 AppButton {
+                    objectName: "SettingsPage_AppButton_8"
                     flat: true
                     Layout.preferredHeight: 40
                     leftPadding: 18
@@ -511,6 +519,7 @@ Item {
                     onClicked: resetDialog.close()
                 }
                 AppButton {
+                    objectName: "SettingsPage_AppButton_9"
                     flat: true
                     Layout.preferredHeight: 40
                     leftPadding: 20

@@ -77,6 +77,11 @@ class AppController(QObject):
             "perCategoryCount": {},
         }
         self._update_info: dict[str, Any] = {}
+        # A scan can report tens of thousands of files. Rebuilding the QML
+        # lists once per file starves the UI thread, so notifications are
+        # throttled and always flushed when the scan finishes.
+        self._last_ui_emit = 0.0
+        self._ui_dirty = False
         self.scan_worker: ScanWorker | None = None
         self.clean_worker: CleanWorker | None = None
         self.update_worker: UpdateChecker | None = None
@@ -232,6 +237,8 @@ class AppController(QObject):
             return
         self._items.clear()
         self._selection.clear()
+        self._last_ui_emit = 0.0
+        self._ui_dirty = False
         self.scanResultsChanged.emit()
         self.selectionChanged.emit()
         self._summary = {
@@ -265,19 +272,31 @@ class AppController(QObject):
     def cancelScan(self) -> None:
         if self.scan_worker and self.scan_worker.isRunning():
             self.scan_worker.cancel()
+            self._flush_scan_ui()
             self._set_status("status.cancelled")
             self.toast.emit(self.tr("status.cancelled"), "info")
 
     def _on_item_found(self, item: Any) -> None:
         self._items.append(item)
         self._selection.add(len(self._items) - 1)
-        self.scanResultsChanged.emit()
-        self.selectionChanged.emit()
         category = item.category
         self._summary["totalBytes"] += item.size
         self._summary["totalItems"] += 1
         self._summary["perCategory"][category] = self._summary["perCategory"].get(category, 0) + item.size
         self._summary["perCategoryCount"][category] = self._summary["perCategoryCount"].get(category, 0) + 1
+        self._ui_dirty = True
+        # Throttle UI rebuilds to at most ~8 per second during a busy scan.
+        now = time.monotonic()
+        if now - self._last_ui_emit >= 0.12:
+            self._flush_scan_ui(now)
+
+    def _flush_scan_ui(self, now: float | None = None) -> None:
+        if not self._ui_dirty:
+            return
+        self._ui_dirty = False
+        self._last_ui_emit = time.monotonic() if now is None else now
+        self.scanResultsChanged.emit()
+        self.selectionChanged.emit()
         self.summaryChanged.emit()
 
     @Slot(int, str)
@@ -296,6 +315,7 @@ class AppController(QObject):
         self.progressChanged.emit()
         self.settings.set("last_scan", int(time.time()))
         self._set_status("status.done")
+        self._flush_scan_ui()
         self.summaryChanged.emit()
         self.toast.emit(self.tr("notify.scanDone", summary.total_items), "success")
 

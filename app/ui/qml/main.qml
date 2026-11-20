@@ -32,7 +32,7 @@ ApplicationWindow {
 
     Connections {
         target: appController
-        function onSettingsJsonChanged() {
+        function onSettingsChanged() {
             settings = JSON.parse(appController.settingsJson)
             confirmClean = settings.confirm !== false
         }
@@ -102,6 +102,7 @@ ApplicationWindow {
                 ]
                 delegate: AppButton {
                     id: navBtn
+                    objectName: "nav_" + modelData.id
                     Layout.fillWidth: true
                     Layout.preferredHeight: 44
                     flat: true
@@ -110,23 +111,26 @@ ApplicationWindow {
                     rightPadding: 12
                     background: Rectangle {
                         radius: Theme.radiusSmall
+                        // Active nav is a neutral step up, never an accent pill.
                         color: win.currentPage === modelData.id
-                            ? Qt.rgba(Theme.accent.r, Theme.accent.g, Theme.accent.b, 0.18)
+                            ? Theme.surfaceAlt
                             : (navBtn.hovered ? Qt.rgba(Theme.text.r, Theme.text.g, Theme.text.b, 0.05) : "transparent")
+                        border.width: win.currentPage === modelData.id ? 1 : 0
+                        border.color: Theme.border
                         Behavior on color { ColorAnimation { duration: 160 } }
                     }
                     contentItem: RowLayout {
                         spacing: 12
                         Label {
                             text: modelData.icon
-                            color: win.currentPage === modelData.id ? Theme.accentLight : Theme.textMuted
+                            color: win.currentPage === modelData.id ? Theme.text : Theme.textMuted
                             font.pixelSize: 18
                         }
                         Label {
                             text: appController.translate(modelData.key)
                             color: win.currentPage === modelData.id ? Theme.text : Theme.textMuted
                             font.family: Theme.fontFamily
-                            font.pixelSize: 12
+                            font.pixelSize: 13
                             font.bold: win.currentPage === modelData.id
                             Layout.fillWidth: true
                             elide: Text.ElideRight
@@ -160,7 +164,7 @@ ApplicationWindow {
                         Rectangle { Layout.preferredWidth: 7; Layout.preferredHeight: 7; radius: 4; color: Theme.green }
                         Label {
                             text: appController.status
-                            color: Theme.text; font.family: Theme.fontFamily; font.pixelSize: 10
+                            color: Theme.text; font.family: Theme.fontFamily; font.pixelSize: 11
                             elide: Text.ElideRight; Layout.fillWidth: true
                         }
                     }
@@ -168,7 +172,7 @@ ApplicationWindow {
                         text: appController.statusDetail || appController.appVersion
                         color: Theme.textFaint
                         font.family: Theme.fontFamily
-                        font.pixelSize: 9
+                        font.pixelSize: 11
                         elide: Text.ElideRight
                         Layout.fillWidth: true
                     }
@@ -220,6 +224,7 @@ ApplicationWindow {
                 }
 
                 AppButton {
+                    objectName: "main_AppButton_2"
                     id: updateBadge
                     visible: {
                         var u = JSON.parse(appController.updateInfoJson)
@@ -233,7 +238,7 @@ ApplicationWindow {
                     background: Rectangle { radius: 17; color: Qt.rgba(Theme.amber.r, Theme.amber.g, Theme.amber.b, 0.16) }
                     contentItem: RowLayout {
                         spacing: 6
-                        Label { text: "●"; color: Theme.amber; font.pixelSize: 10 }
+                        Label { text: "●"; color: Theme.amber; font.pixelSize: 11 }
                         Label {
                             text: {
                                 var u = JSON.parse(appController.updateInfoJson)
@@ -241,13 +246,20 @@ ApplicationWindow {
                             }
                             color: Theme.amber
                             font.family: Theme.fontFamily
-                            font.pixelSize: 11
+                            font.pixelSize: 12
+                            Layout.fillWidth: true
+                            horizontalAlignment: Text.AlignHCenter
+                            elide: Text.ElideRight
                         }
                     }
-                    onClicked: win.currentPage = "settings", stack.replace(pageFor("settings"))
+                    onClicked: {
+                        win.currentPage = "settings"
+                        stack.replace(pageFor("settings"))
+                    }
                 }
 
                 AppButton {
+                    objectName: "main_AppButton_3"
                     id: scanButton
                     visible: win.currentPage === "dashboard" || win.currentPage === "analyze"
                     enabled: !appController.busy
@@ -257,17 +269,23 @@ ApplicationWindow {
                     rightPadding: 18
                     background: Rectangle {
                         radius: Theme.radiusSmall
-                        color: scanButton.enabled ? Theme.accent : Theme.textFaint
+                        color: scanButton.hovered ? Theme.surfaceAlt : Theme.surface
+                        border.width: 1
+                        border.color: Theme.border
+                        opacity: scanButton.enabled ? 1 : 0.5
                     }
                     contentItem: RowLayout {
                         spacing: 8
-                        Label { text: "✦"; color: "white"; font.pixelSize: 14 }
+                        Label { text: "✦"; color: Theme.text; font.pixelSize: 14 }
                         Label {
                             text: appController.translate("header.scan")
-                            color: "white"
+                            color: Theme.text
                             font.family: Theme.fontFamily
                             font.pixelSize: 12
                             font.bold: true
+                            Layout.fillWidth: true
+                            horizontalAlignment: Text.AlignHCenter
+                            elide: Text.ElideRight
                         }
                     }
                     onClicked: {
@@ -278,6 +296,7 @@ ApplicationWindow {
                 }
 
                 AppButton {
+                    objectName: "main_AppButton_4"
                     id: cleanButton
                     visible: win.currentPage === "analyze" && selection.count > 0
                     enabled: !appController.busy
@@ -285,22 +304,33 @@ ApplicationWindow {
                     padding: 0
                     leftPadding: 18
                     rightPadding: 18
+                    pressColor: Theme.dark ? "#000000" : "#FFFFFF"
+                    pressOpacity: 0.18
                     background: Rectangle {
                         radius: Theme.radiusSmall
-                        color: cleanButton.enabled ? Theme.green : Theme.textFaint
+                        color: Theme.dark ? "#F4F6F8" : "#14171C"
+                        opacity: cleanButton.enabled ? 1 : 0.5
                     }
                     contentItem: RowLayout {
                         spacing: 8
-                        Label { text: "✓"; color: "white"; font.pixelSize: 14 }
+                        Label { text: "✓"; color: Theme.dark ? "#14171C" : "#FFFFFF"; font.pixelSize: 14 }
                         Label {
                             text: appController.translate("common.clean") + " (" + selection.human + ")"
-                            color: "white"; font.family: Theme.fontFamily; font.pixelSize: 12; font.bold: true
+                            color: Theme.dark ? "#14171C" : "#FFFFFF"
+                            font.family: Theme.fontFamily; font.pixelSize: 12; font.bold: true
+                            Layout.fillWidth: true
+                            horizontalAlignment: Text.AlignHCenter
+                            elide: Text.ElideRight
                         }
                     }
-                    onClicked: confirmDialog.open()
+                    onClicked: {
+                        if (confirmClean) confirmDialog.open()
+                        else appController.cleanSelected(settings.useTrash ? "false" : "true", true)
+                    }
                 }
 
                 AppButton {
+                    objectName: "main_AppButton_5"
                     id: cancelButton
                     visible: appController.busy
                     flat: true
@@ -312,6 +342,8 @@ ApplicationWindow {
                     contentItem: Label {
                         text: appController.translate("header.cancel")
                         color: Theme.red; font.family: Theme.fontFamily; font.pixelSize: 12
+                        Layout.fillWidth: true
+                        horizontalAlignment: Text.AlignHCenter
                     }
                     onClicked: {
                         if (appController.scanning) appController.cancelScan()
@@ -408,6 +440,7 @@ ApplicationWindow {
                 spacing: 10
                 Item { Layout.fillWidth: true }
                 AppButton {
+                    objectName: "main_AppButton_6"
                     flat: true
                     Layout.preferredHeight: 40
                     leftPadding: 18
@@ -421,14 +454,18 @@ ApplicationWindow {
                     onClicked: confirmDialog.close()
                 }
                 AppButton {
+                    objectName: "main_AppButton_7"
                     flat: true
                     Layout.preferredHeight: 40
                     leftPadding: 20
                     rightPadding: 20
-                    background: Rectangle { radius: Theme.radiusSmall; color: Theme.green }
+                    pressColor: Theme.dark ? "#000000" : "#FFFFFF"
+                    pressOpacity: 0.18
+                    background: Rectangle { radius: Theme.radiusSmall; color: Theme.dark ? "#F4F6F8" : "#14171C" }
                     contentItem: Label {
                         text: appController.translate("common.clean")
-                        color: "white"; font.family: Theme.fontFamily; font.pixelSize: 11; font.bold: true
+                        color: Theme.dark ? "#14171C" : "#FFFFFF"
+                        font.family: Theme.fontFamily; font.pixelSize: 12; font.bold: true
                         horizontalAlignment: Text.AlignHCenter; Layout.fillWidth: true
                     }
                     onClicked: {

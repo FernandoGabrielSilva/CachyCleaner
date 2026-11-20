@@ -26,7 +26,7 @@ Item {
             Label {
                 text: root.hint
                 visible: root.hint.length > 0
-                color: Theme.textMuted; font.family: Theme.fontFamily; font.pixelSize: 10
+                color: Theme.textMuted; font.family: Theme.fontFamily; font.pixelSize: 11
                 wrapMode: Text.WordWrap; Layout.fillWidth: true
             }
         }

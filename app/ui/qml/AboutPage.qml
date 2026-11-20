@@ -87,7 +87,7 @@ Item {
                     }
                     RowLayout {
                         Layout.fillWidth: true
-                        Label { text: controller ? controller.translate("about.builtWith") : ""; color: Theme.textFaint; font.family: Theme.fontFamily; font.pixelSize: 10; Layout.fillWidth: true; wrapMode: Text.WordWrap }
+                        Label { text: controller ? controller.translate("about.builtWith") : ""; color: Theme.textFaint; font.family: Theme.fontFamily; font.pixelSize: 11; Layout.fillWidth: true; wrapMode: Text.WordWrap }
                     }
 
                     RowLayout {
@@ -95,6 +95,7 @@ Item {
                         Layout.topMargin: 4
                         spacing: 10
                         AppButton {
+                            objectName: "aboutGithub"
                             flat: true
                             Layout.preferredHeight: 40
                             leftPadding: 18; rightPadding: 18
@@ -107,6 +108,7 @@ Item {
                             onClicked: controller.openReleases()
                         }
                         AppButton {
+                            objectName: "aboutCheckUpdate"
                             flat: true
                             Layout.preferredHeight: 40
                             leftPadding: 18; rightPadding: 18

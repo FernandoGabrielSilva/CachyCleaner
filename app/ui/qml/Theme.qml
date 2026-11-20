@@ -5,21 +5,23 @@ import QtQuick.Controls 6.0
 QtObject {
     readonly property bool dark: appController ? appController.effectiveTheme === "dark" : true
 
-    readonly property color accent: "#7C5CFF"
-    readonly property color accentLight: "#A78BFA"
-    readonly property color accentDark: "#5B3FD6"
-    readonly property color green: "#22C55E"
-    readonly property color red: "#EF4444"
-    readonly property color amber: "#F59E0B"
-    readonly property color blue: "#3B82F6"
+    // CachyOS cyan/green family: colour lives on data and one highlight,
+    // never on every control. True neutral darks, no navy or slate.
+    readonly property color accent: "#22D3EE"
+    readonly property color accentLight: "#67E8F9"
+    readonly property color accentDark: "#0E7490"
+    readonly property color green: "#34D399"
+    readonly property color red: "#F87171"
+    readonly property color amber: "#FBBF24"
+    readonly property color blue: "#60A5FA"
 
-    readonly property color bg: dark ? "#0A0C12" : "#F7F8FC"
-    readonly property color surface: dark ? "#12151F" : "#FFFFFF"
-    readonly property color surfaceAlt: dark ? "#1A1E2A" : "#F1F3FA"
-    readonly property color border: dark ? "#242938" : "#E6E8F0"
-    readonly property color text: dark ? "#F2F4FB" : "#141726"
-    readonly property color textMuted: dark ? "#98A0B5" : "#6B7280"
-    readonly property color textFaint: dark ? "#68708A" : "#9CA3AF"
+    readonly property color bg: dark ? "#0C0E11" : "#F7F8FA"
+    readonly property color surface: dark ? "#14171C" : "#FFFFFF"
+    readonly property color surfaceAlt: dark ? "#1B1F26" : "#F1F3F6"
+    readonly property color border: dark ? "#282D36" : "#E5E8EE"
+    readonly property color text: dark ? "#F4F6F8" : "#141726"
+    readonly property color textMuted: dark ? "#A9B1BD" : "#606876"
+    readonly property color textFaint: dark ? "#7D8795" : "#858D99"
     readonly property color shadow: dark ? "#000000" : "#C9CEDC"
 
     readonly property int radius: 16
@@ -33,8 +35,8 @@ QtObject {
 
     readonly property font fontTitle: Qt.font({
         family: "Inter, Segoe UI, Noto Sans, Sans Serif",
-        pointSize: 26,
-        weight: Font.Bold
+        pointSize: 24,
+        weight: Font.DemiBold
     })
     readonly property font fontHeading: Qt.font({
         family: "Inter, Segoe UI, Noto Sans, Sans Serif",
@@ -43,16 +45,16 @@ QtObject {
     })
     readonly property font fontBody: Qt.font({
         family: "Inter, Segoe UI, Noto Sans, Sans Serif",
-        pointSize: 10,
+        pointSize: 14,
         weight: Font.Normal
     })
     readonly property font fontSmall: Qt.font({
         family: "Inter, Segoe UI, Noto Sans, Sans Serif",
-        pointSize: 9,
+        pointSize: 12,
         weight: Font.Normal
     })
     readonly property font fontMono: Qt.font({
         family: "JetBrains Mono, Fira Code, monospace",
-        pointSize: 9
+        pointSize: 11
     })
 }

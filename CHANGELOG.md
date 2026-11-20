@@ -11,7 +11,11 @@ Primeira versão pública do CachyCleaner.
 - Paleta revisada para o tema escuro (fundo, superfícies, bordas e textos com contraste adequado).
 - Correção dos espaçamentos: os cards de Configurações tinham altura zero e se sobrepunham; agora cada card dimensiona seu conteúdo corretamente.
 - Barras laterais, cabeçalho, páginas, tabelas, diálogos e notificações com margens, raios e hierarquia tipográfica consistentes.
-- Botões com texto centralizado, alinhamento vertical correto e **feedback visual ao pressionar**.
+- Botões com texto centralizado, alinhamento vertical correto e **feedback visual ao pressionar** (escurecimento instantâneo + leve escala/comprimento).
+- Paleta de acento em ciano inspirada no CachyOS; cor aplicada aos dados e a um único controle, nunca ao chrome.
+- Superfícies planas separadas por linhas de 1 px; navegação com destaque neutro em vez de pílula colorida.
+- Resumo do painel em uma única faixa dividida por linhas (sem ícones em círculos coloridos nem sparklines).
+- Hierarquia tipográfica 12/14/16/24 com piso de 11 px e números tabulares.
 - Opção de tema claro/escuro/sistema nas Configurações.
 
 ### Funcionalidades
@@ -27,6 +31,9 @@ Primeira versão pública do CachyCleaner.
 - Textos da interface apareciam vazios porque o método de tradução exposto ao QML não declarava o tipo de retorno; corrigido.
 - Exceção `TypeError: busyChanged(bool) needs 1 argument(s), 0 given!` ao iniciar uma análise: os sinais de notificação agora não exigem argumentos.
 - Botões com texto descentralizado e sem indicação visual de clique; corrigido.
+- Configuração “confirmar antes de limpar” passou a ser respeitada pelo botão de limpeza.
+- Handler de configurações conectado ao sinal correto (`settingsChanged`); o resumo de confirmação agora atualiza.
+- Análises com dezenas de milhares de arquivos travavam a interface: notificações de resultado são agora agrupadas (máx. ~8 por segundo) e enviadas ao final.
 
 ### Entregáveis
 - Linux: AppImage `x86_64` e `aarch64`, `.deb`, `.pkg.tar.zst` (pacman/Arch/CachyOS) e `.tar.gz` portátil.

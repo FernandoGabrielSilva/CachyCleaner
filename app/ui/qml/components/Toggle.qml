@@ -31,6 +31,10 @@ Item {
     MouseArea {
         anchors.fill: parent
         cursorShape: Qt.PointingHandCursor
+        onPressed: root.scale = 0.94
+        onReleased: root.scale = 1
+        onCanceled: root.scale = 1
         onClicked: { root.checked = !root.checked; root.toggled(root.checked) }
     }
+    Behavior on scale { NumberAnimation { duration: 90; easing.type: Easing.OutQuad } }
 }

@@ -68,6 +68,7 @@ Item {
             Item { Layout.fillWidth: true }
 
             AppButton {
+                objectName: "AnalyzePage_AppButton_1"
                 flat: true
                 Layout.preferredHeight: 40
                 leftPadding: 16
@@ -81,6 +82,7 @@ Item {
                 onClicked: controller.selectAll()
             }
             AppButton {
+                objectName: "AnalyzePage_AppButton_2"
                 flat: true
                 Layout.preferredHeight: 40
                 leftPadding: 16
@@ -147,17 +149,17 @@ Item {
                         Item { Layout.preferredWidth: 64 }
                         Label {
                             text: controller ? controller.translate("analyze.results") : ""
-                            color: Theme.textMuted; font.family: Theme.fontFamily; font.pixelSize: 10
+                            color: Theme.textMuted; font.family: Theme.fontFamily; font.pixelSize: 11
                             Layout.fillWidth: true
                         }
                         Label {
                             text: controller ? controller.translate("analyze.size") : ""
-                            color: Theme.textMuted; font.family: Theme.fontFamily; font.pixelSize: 10
+                            color: Theme.textMuted; font.family: Theme.fontFamily; font.pixelSize: 11
                             Layout.preferredWidth: 92; horizontalAlignment: Text.AlignRight
                         }
                         Label {
                             text: controller ? controller.translate("analyze.modified") : ""
-                            color: Theme.textMuted; font.family: Theme.fontFamily; font.pixelSize: 10
+                            color: Theme.textMuted; font.family: Theme.fontFamily; font.pixelSize: 11
                             Layout.preferredWidth: 120; horizontalAlignment: Text.AlignRight
                         }
                     }
@@ -251,19 +253,19 @@ Item {
                                 }
                                 Label {
                                     text: row.item ? row.item.path : ""
-                                    color: Theme.textFaint; font.family: Theme.fontFamily; font.pixelSize: 9
+                                    color: Theme.textFaint; font.family: Theme.fontFamily; font.pixelSize: 11
                                     elide: Text.ElideMiddle
                                     Layout.fillWidth: true
                                 }
                             }
                             Label {
                                 text: row.item ? humanSize(row.item.size) : ""
-                                color: Theme.text; font.family: Theme.monoFamily; font.pixelSize: 10
+                                color: Theme.text; font.family: Theme.monoFamily; font.pixelSize: 11
                                 Layout.preferredWidth: 92; horizontalAlignment: Text.AlignRight
                             }
                             Label {
                                 text: row.item && row.item.modified ? new Date(row.item.modified * 1000).toLocaleDateString() : "—"
-                                color: Theme.textMuted; font.family: Theme.fontFamily; font.pixelSize: 10
+                                color: Theme.textMuted; font.family: Theme.fontFamily; font.pixelSize: 11
                                 Layout.preferredWidth: 120; horizontalAlignment: Text.AlignRight
                             }
                         }
