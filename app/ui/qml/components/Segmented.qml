@@ -41,7 +41,7 @@ Item {
                     font.family: Theme.fontFamily
                     font.pixelSize: 10
                     font.bold: root.current === modelData.value
-                    horizontalAlignment: Text.AlignHCenter
+                    horizontalAlignment: Text.AlignHCenter; Layout.fillWidth: true
                     verticalAlignment: Text.AlignVCenter
                 }
                 onClicked: {

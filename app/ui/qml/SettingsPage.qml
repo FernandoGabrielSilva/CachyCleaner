@@ -214,7 +214,7 @@ Item {
                             Layout.preferredHeight: 40
                             enabled: folderPathField.text.length > 0
                             background: Rectangle { radius: Theme.radiusSmall; color: addFolderBtn.enabled ? Theme.accent : Theme.textFaint }
-                            contentItem: Label { text: "+"; color: "white"; font.pixelSize: 18; font.bold: true; horizontalAlignment: Text.AlignHCenter }
+                            contentItem: Label { text: "+"; color: "white"; font.pixelSize: 18; font.bold: true; horizontalAlignment: Text.AlignHCenter; Layout.fillWidth: true }
                             onClicked: {
                                 if (controller.addCustomFolder(folderPathField.text, patternField.text, "custom", 0)) {
                                     folderPathField.text = ""
@@ -250,7 +250,7 @@ Item {
                                         Layout.preferredWidth: 30
                                         Layout.preferredHeight: 30
                                         background: Rectangle { radius: 8; color: Qt.rgba(Theme.red.r, Theme.red.g, Theme.red.b, 0.12) }
-                                        contentItem: Label { text: "×"; color: Theme.red; font.pixelSize: 16; font.bold: true; horizontalAlignment: Text.AlignHCenter }
+                                        contentItem: Label { text: "×"; color: Theme.red; font.pixelSize: 16; font.bold: true; horizontalAlignment: Text.AlignHCenter; Layout.fillWidth: true }
                                         onClicked: controller.removeCustomFolder(modelData.id)
                                     }
                                 }
@@ -343,7 +343,7 @@ Item {
                             contentItem: Label {
                                 text: "+ " + (controller ? controller.translate("settings.addExclusion") : "")
                                 color: Theme.accent; font.family: Theme.fontFamily; font.pixelSize: 11
-                                horizontalAlignment: Text.AlignHCenter
+                                horizontalAlignment: Text.AlignHCenter; Layout.fillWidth: true
                             }
                             onClicked: {
                                 if (controller.addExclusion(exclusionField.text)) exclusionField.text = ""
@@ -375,7 +375,7 @@ Item {
                                         Layout.preferredWidth: 28
                                         Layout.preferredHeight: 28
                                         background: Rectangle { radius: 7; color: Qt.rgba(Theme.red.r, Theme.red.g, Theme.red.b, 0.12) }
-                                        contentItem: Label { text: "×"; color: Theme.red; font.pixelSize: 15; horizontalAlignment: Text.AlignHCenter }
+                                        contentItem: Label { text: "×"; color: Theme.red; font.pixelSize: 15; horizontalAlignment: Text.AlignHCenter; Layout.fillWidth: true }
                                         onClicked: controller.removeExclusion(modelData)
                                     }
                                 }
@@ -420,7 +420,7 @@ Item {
                             contentItem: Label {
                                 text: controller ? controller.translate("settings.checkNow") : ""
                                 color: Theme.accent; font.family: Theme.fontFamily; font.pixelSize: 11
-                                horizontalAlignment: Text.AlignHCenter
+                                horizontalAlignment: Text.AlignHCenter; Layout.fillWidth: true
                             }
                             onClicked: controller.checkForUpdates()
                         }
@@ -433,7 +433,7 @@ Item {
                             contentItem: Label {
                                 text: controller ? controller.translate("settings.download") : ""
                                 color: Theme.green; font.family: Theme.fontFamily; font.pixelSize: 11
-                                horizontalAlignment: Text.AlignHCenter
+                                horizontalAlignment: Text.AlignHCenter; Layout.fillWidth: true
                             }
                             onClicked: controller.openReleases()
                         }
@@ -450,7 +450,7 @@ Item {
                 contentItem: Label {
                     text: controller ? controller.translate("settings.reset") : ""
                     color: Theme.red; font.family: Theme.fontFamily; font.pixelSize: 11
-                    horizontalAlignment: Text.AlignHCenter
+                    horizontalAlignment: Text.AlignHCenter; Layout.fillWidth: true
                 }
                 onClicked: resetDialog.open()
             }
@@ -506,7 +506,7 @@ Item {
                     contentItem: Label {
                         text: controller ? controller.translate("common.cancel") : ""
                         color: Theme.text; font.family: Theme.fontFamily; font.pixelSize: 11
-                        horizontalAlignment: Text.AlignHCenter
+                        horizontalAlignment: Text.AlignHCenter; Layout.fillWidth: true
                     }
                     onClicked: resetDialog.close()
                 }
@@ -519,7 +519,7 @@ Item {
                     contentItem: Label {
                         text: controller ? controller.translate("settings.reset") : ""
                         color: "white"; font.family: Theme.fontFamily; font.pixelSize: 11; font.bold: true
-                        horizontalAlignment: Text.AlignHCenter
+                        horizontalAlignment: Text.AlignHCenter; Layout.fillWidth: true
                     }
                     onClicked: {
                         resetDialog.close()

@@ -416,7 +416,7 @@ ApplicationWindow {
                     contentItem: Label {
                         text: appController.translate("common.cancel")
                         color: Theme.text; font.family: Theme.fontFamily; font.pixelSize: 11
-                        horizontalAlignment: Text.AlignHCenter
+                        horizontalAlignment: Text.AlignHCenter; Layout.fillWidth: true
                     }
                     onClicked: confirmDialog.close()
                 }
@@ -429,7 +429,7 @@ ApplicationWindow {
                     contentItem: Label {
                         text: appController.translate("common.clean")
                         color: "white"; font.family: Theme.fontFamily; font.pixelSize: 11; font.bold: true
-                        horizontalAlignment: Text.AlignHCenter
+                        horizontalAlignment: Text.AlignHCenter; Layout.fillWidth: true
                     }
                     onClicked: {
                         confirmDialog.close()

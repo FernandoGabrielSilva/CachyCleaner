@@ -31,21 +31,23 @@ QML_IMPORT_MAJOR_VERSION = 1
 class AppController(QObject):
     """Single source of truth for the QML frontend."""
 
-    # Global state
-    languageChanged = Signal(str)
-    themeChanged = Signal(str)
-    statusChanged = Signal(str)
-    statusDetailChanged = Signal(str)
-    busyChanged = Signal(bool)
-    scanningChanged = Signal(bool)
-    progressChanged = Signal(int)
+    # Global state. These are change notifiers only: QML reads the current
+    # value through the bound property, so no payload is needed (and emitting
+    # them without arguments must keep working everywhere).
+    languageChanged = Signal()
+    themeChanged = Signal()
+    statusChanged = Signal()
+    statusDetailChanged = Signal()
+    busyChanged = Signal()
+    scanningChanged = Signal()
+    progressChanged = Signal()
     toast = Signal(str, str)  # message, type
 
     # Scan state
     scanResultsChanged = Signal()
     summaryChanged = Signal()
     selectionChanged = Signal()
-    searchChanged = Signal(str)
+    searchChanged = Signal()
 
     # Settings state
     rulesChanged = Signal()
@@ -109,7 +111,7 @@ class AppController(QObject):
 
     @Property(str, notify=themeChanged)
     def theme(self) -> str:
-        return str(self.settings.get("theme", "system"))
+        return str(self.settings.get("theme", "dark"))
 
     @Property(str, constant=True)
     def appName(self) -> str:
@@ -272,10 +274,10 @@ class AppController(QObject):
         self.scanResultsChanged.emit()
         self.selectionChanged.emit()
         category = item.category
-        self._summary["total_bytes"] += item.size
-        self._summary["total_items"] += 1
-        self._summary["per_category"][category] = self._summary["per_category"].get(category, 0) + item.size
-        self._summary["per_category_count"][category] = self._summary["per_category_count"].get(category, 0) + 1
+        self._summary["totalBytes"] += item.size
+        self._summary["totalItems"] += 1
+        self._summary["perCategory"][category] = self._summary["perCategory"].get(category, 0) + item.size
+        self._summary["perCategoryCount"][category] = self._summary["perCategoryCount"].get(category, 0) + 1
         self.summaryChanged.emit()
 
     @Slot(int, str)

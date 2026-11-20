@@ -102,7 +102,7 @@ Item {
                             contentItem: Label {
                                 text: controller ? controller.translate("about.github") : ""
                                 color: Theme.accent; font.family: Theme.fontFamily; font.pixelSize: 11
-                                horizontalAlignment: Text.AlignHCenter
+                                horizontalAlignment: Text.AlignHCenter; Layout.fillWidth: true
                             }
                             onClicked: controller.openReleases()
                         }
@@ -114,7 +114,7 @@ Item {
                             contentItem: Label {
                                 text: controller ? controller.translate("about.checkUpdate") : ""
                                 color: Theme.text; font.family: Theme.fontFamily; font.pixelSize: 11
-                                horizontalAlignment: Text.AlignHCenter
+                                horizontalAlignment: Text.AlignHCenter; Layout.fillWidth: true
                             }
                             onClicked: controller.checkForUpdates()
                         }

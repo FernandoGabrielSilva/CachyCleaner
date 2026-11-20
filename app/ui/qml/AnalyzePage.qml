@@ -76,7 +76,7 @@ Item {
                 contentItem: Label {
                     text: controller ? controller.translate("analyze.selectAll") : ""
                     color: Theme.text; font.family: Theme.fontFamily; font.pixelSize: 11
-                    horizontalAlignment: Text.AlignHCenter
+                    horizontalAlignment: Text.AlignHCenter; Layout.fillWidth: true
                 }
                 onClicked: controller.selectAll()
             }
@@ -89,7 +89,7 @@ Item {
                 contentItem: Label {
                     text: controller ? controller.translate("analyze.clearAll") : ""
                     color: Theme.text; font.family: Theme.fontFamily; font.pixelSize: 11
-                    horizontalAlignment: Text.AlignHCenter
+                    horizontalAlignment: Text.AlignHCenter; Layout.fillWidth: true
                 }
                 onClicked: controller.clearSelection()
             }
@@ -275,7 +275,7 @@ Item {
                         visible: items.length === 0 && !controller.busy
                         text: controller ? controller.translate("analyze.emptyHint") : ""
                         color: Theme.textFaint; font.family: Theme.fontFamily; font.pixelSize: 12
-                        horizontalAlignment: Text.AlignHCenter
+                        horizontalAlignment: Text.AlignHCenter; Layout.fillWidth: true
                         wrapMode: Text.WordWrap
                     }
                     BusyIndicator {

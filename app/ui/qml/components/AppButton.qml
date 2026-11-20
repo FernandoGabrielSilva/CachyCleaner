@@ -24,4 +24,15 @@ Button {
 
     font.family: Theme.fontFamily
     font.pixelSize: 12
+
+    // Visible feedback while the pointer is pressed, so every click is obvious.
+    Rectangle {
+        anchors.fill: parent
+        radius: Theme.radiusSmall
+        color: Theme.dark ? "#FFFFFF" : "#000000"
+        opacity: root.down ? 0.2 : 0
+        visible: root.enabled
+        z: 2
+        Behavior on opacity { NumberAnimation { duration: 90 } }
+    }
 }
