@@ -28,12 +28,12 @@ cp app/assets/icon.png "$APPDIR/CachyCleaner.png"
 APPIMAGETOOL="$(command -v appimagetool || true)"
 if [[ -z "$APPIMAGETOOL" ]]; then
   echo "==> Downloading appimagetool for ${ARCH}..."
-  APPIMAGETOOL="appimagetool-${ARCH}.AppImage"
+  APPIMAGETOOL="./appimagetool-${ARCH}.AppImage"
   curl -fsSL -o "$APPIMAGETOOL" \
     "https://github.com/AppImage/AppImageKit/releases/download/continuous/appimagetool-${ARCH}.AppImage"
   chmod +x "$APPIMAGETOOL"
 fi
 
 echo "==> Generating AppImage for ${ARCH}..."
-"$APPIMAGETOOL" "$APPDIR" "CachyCleaner-1.0.0-${ARCH}.AppImage"
+APPIMAGE_EXTRACT_AND_RUN=1 "$APPIMAGETOOL" "$APPDIR" "CachyCleaner-1.0.0-${ARCH}.AppImage"
 echo "==> Done: CachyCleaner-1.0.0-${ARCH}.AppImage"

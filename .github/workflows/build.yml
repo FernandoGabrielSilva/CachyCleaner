@@ -79,7 +79,7 @@ jobs:
           Installed-Size: ${INSTALLED}
           Depends: libegl1, libgl1, libxkbcommon-x11-0, libdbus-1-3
           Description: Modern, safe, cross-platform system cleaner
-          CachyCleaner finds and safely removes caches, temporary files and junk.
+           CachyCleaner finds and safely removes caches, temporary files and junk.
           EOF
           dpkg-deb --build debpkg "$DEB"
           # --- rpm (via alien)
@@ -149,17 +149,14 @@ jobs:
       - name: Build PyInstaller bundle
         run: python -m PyInstaller CachyCleaner.spec --noconfirm
 
-      - name: Install WiX v4
+      - name: Install WiX
         shell: pwsh
-        run: |
-          dotnet tool install --global wix --version 4.0.5
-          wix extension add WixToolset.UI.wixext
+        run: dotnet tool install --global wix
 
       - name: Build MSI
         shell: pwsh
         run: |
           wix build packaging\windows\CachyCleaner.wxs `
-            -ext WixToolset.UI.wixext `
             -o "CachyCleaner-1.0.0-windows-x86_64.msi"
 
       - name: Upload MSI artifact

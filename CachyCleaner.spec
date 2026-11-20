@@ -65,3 +65,19 @@ coll = COLLECT(
     upx_exclude=[],
     name="CachyCleaner",
 )
+
+import sys
+
+if sys.platform == "darwin":
+    app = BUNDLE(
+        coll,
+        name="CachyCleaner.app",
+        icon="app/assets/icon.icns" if __import__("os").path.exists("app/assets/icon.icns") else None,
+        bundle_identifier="com.fernandogabriel.cachycleaner",
+        info_plist={
+            "CFBundleDisplayName": "CachyCleaner",
+            "CFBundleShortVersionString": "1.0.0",
+            "CFBundleVersion": "1.0.0",
+            "NSHighResolutionCapable": True,
+        },
+    )
